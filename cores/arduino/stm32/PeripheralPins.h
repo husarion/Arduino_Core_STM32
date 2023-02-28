@@ -68,7 +68,9 @@ extern const PinMap PinMap_CAN_RD[];
 extern const PinMap PinMap_CAN_TD[];
 
 //*** ETHERNET ***
-extern const PinMap PinMap_Ethernet[];
+extern const PinMap PinMap_Ethernet_RMII[];
+extern const PinMap PinMap_Ethernet_MII[];
+
 
 //*** QUADSPI ***
 extern const PinMap PinMap_QUADSPI_DATA0[];

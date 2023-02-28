@@ -1,30 +1,39 @@
+# -*- coding: utf-8 -*-
+
+# File name            : astyle.py
+# Author               : Frederic PILLON <frederic.pillon@st.com>
+# Created              : 11/16/2018
+# Python Version       :
+# Requirements         : Artistic Style Version 3.1
+# Description          : Launch astyle on found source files
+
 import argparse
-from pathlib import Path
+import os
 import re
 import subprocess
 import sys
 
-script_path = Path(__file__).parent.resolve()
+script_path = os.path.dirname(os.path.abspath(__file__))
 ignore_filename = ".astyleignore"
 def_filename = ".astylerc"
 astyle_out_filename = "astyle.out"
-if Path.cwd() != script_path:
-    src_path = Path.cwd()
+if os.getcwd() != script_path:
+    src_path = os.getcwd()
 else:
-    src_path = script_path.parent.parent
-ignore_path = script_path / ignore_filename
-def_path = script_path / def_filename
-astyle_out_path = Path(astyle_out_filename)
+    src_path = os.path.realpath(os.path.join("..", ".."))
+ignore_path = os.path.join(script_path, ignore_filename)
+def_path = os.path.join(script_path, def_filename)
+astyle_out_path = astyle_out_filename
 git_branch = "remotes/origin/main"
 
-script_version = "1.0.0"
 astyle_major = 3
 astyle_minor = 1
-astyle_path = Path()
-astyle_cmd = "astyle"
+astyle_path = ""
 if sys.platform.startswith("win32"):
-    astyle_cmd += ".exe"
-elif not sys.platform.startswith("linux") and not sys.platform.startswith("darwin"):
+    astyle_cmd = "astyle.exe"
+elif sys.platform.startswith("linux") or sys.platform.startswith("darwin"):
+    astyle_cmd = "astyle"
+else:
     print("Platform unknown.")
     sys.exit(1)
 
@@ -34,8 +43,8 @@ exclude_list = []
 
 
 # Check if path exists
-def checkPath(p, msg):
-    if not p.exists():
+def checkPath(path, msg):
+    if not os.path.exists(path):
         print(msg)
         sys.exit(1)
 
@@ -44,7 +53,7 @@ def checkPath(p, msg):
 def checkAstyle():
     try:
         output = subprocess.check_output(
-            [astyle_path, "--version"],
+            [os.path.join(astyle_path, astyle_cmd), "--version"],
             stderr=subprocess.STDOUT,
         )
 
@@ -55,8 +64,11 @@ def checkAstyle():
             if major >= astyle_major and minor >= astyle_minor:
                 print(output.decode("utf-8").rstrip())
             else:
-                print(f"Astyle minimum version required {astyle_major}.{astyle_minor}.")
-                print(f"Current is {major}.{minor}.")
+                print(
+                    "Required Astyle version {}.{} (Current: {}.{})".format(
+                        astyle_major, astyle_minor, major, minor
+                    )
+                )
                 sys.exit(1)
         else:
             raise subprocess.CalledProcessError(1, "No version found")
@@ -79,21 +91,16 @@ def gitdiff_files():
         print(e.output)
         sys.exit(1)
 
-    gitroot = Path(output.decode("utf-8").rstrip())
-    try:
-        rel_src = src_path.relative_to(gitroot)
-    except ValueError:
-        print(f"{src_path} not in git repository.")
-        sys.exit(1)
+    gitroot = output.decode("utf-8").rstrip()
+    rel_src = re.sub("^[/\\]+]", "", re.sub(gitroot, "", src_path))
 
-    cmd = ["git"]
+    cmd = []
+    cmd.append("git")
     cmd.append("diff")
     cmd.append("--name-only")
     cmd.append("--diff-filter=d")
     cmd.append(git_branch)
-    # Relative only if source root path specified
-    if args.root:
-        cmd.append(f"--relative={rel_src}")
+    cmd.append("--relative=" + rel_src)
 
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     while True:
@@ -102,7 +109,7 @@ def gitdiff_files():
             break
         if line:
             if line.endswith((".h", ".c", ".hpp", ".cpp")):
-                source_list.append(gitroot / line.rstrip())
+                source_list.append(os.path.join(gitroot, line.rstrip()))
     if proc.poll() != 0:
         sys.exit(1)
     source_list.sort()
@@ -110,14 +117,10 @@ def gitdiff_files():
 
 # Find all files in source root path
 def find_files():
-    for spath_object in src_path.glob("**/*"):
-        if spath_object.is_file() and spath_object.suffix in [
-            ".h",
-            ".c",
-            ".hpp",
-            ".cpp",
-        ]:
-            source_list.append(spath_object)
+    for root, dirs, files in os.walk(src_path, followlinks=True):
+        for f in files:
+            if f.endswith((".h", ".c", ".hpp", ".cpp")):
+                source_list.append(os.path.join(root, f))
     source_list.sort()
 
 
@@ -129,17 +132,22 @@ def manage_exclude_list():
                 exclude_list.append(line.rstrip())
     if exclude_list:
         for pattern in exclude_list:
-            exclude_path = src_path / pattern
+            if sys.platform.startswith("win32"):
+                winpattern = os.path.join(src_path, pattern.replace("/","\\")) .replace("\\","\\\\")
+                exclude_pattern = re.compile(winpattern + ".*")
+            else:
+                exclude_pattern = re.compile(os.path.join(src_path, pattern) + ".*")
             for s in reversed(source_list):
-                if s.is_relative_to(exclude_path):
+                if exclude_pattern.search(s):
                     source_list.remove(s)
 
 
 # Launch Astyle on all source files
 def astyle():
-    cmd = [astyle_path]
+    cmd = []
+    cmd.append(os.path.join(astyle_path, astyle_cmd))
     cmd.append("-n")
-    cmd.append(f"--options={def_path}")
+    cmd.append("--options=" + def_path)
     cmd.append("dummy_file")
 
     stddout_name = astyle_out_path
@@ -153,19 +161,21 @@ def astyle():
 
 
 # Parser
-parser = argparse.ArgumentParser(description="Launch astyle on source files.")
+parser = argparse.ArgumentParser(
+    description="Launch astyle on source files found at specified root path."
+)
 
 parser.add_argument(
     "-d",
     "--definition",
     metavar="<code style definition file>",
-    help=f"Code style definition file for Astyle. Default: {def_path}",
+    help="Code style definition file for Astyle. Default: " + def_path,
 )
 g0 = parser.add_mutually_exclusive_group()
 g0.add_argument(
     "-g",
     "--gitdiff",
-    help=f"Use changes files from git default branch. Default: {git_branch}",
+    help="Use changes files from git default branch. Default: " + git_branch,
     action="store_true",
 )
 g0.add_argument(
@@ -178,7 +188,7 @@ parser.add_argument(
     "-i",
     "--ignore",
     metavar="<ignore file>",
-    help=f"File containing path to ignore. Default: {ignore_path}",
+    help="File containing path to ignore. Default: " + ignore_path,
 )
 parser.add_argument(
     "-p", "--path", metavar="<astyle install path>", help="Astyle installation path"
@@ -187,7 +197,7 @@ parser.add_argument(
     "-r",
     "--root",
     metavar="<source root path>",
-    help=f"Source root path to use. Default: {src_path}",
+    help="Source root path to use. Default: " + src_path,
 )
 args = parser.parse_args()
 
@@ -199,28 +209,27 @@ def main():
     global astyle_path
     global git_branch
 
-    print(f"Script {Path(__file__).name} version {script_version}")
     if args.root:
-        src_path = Path(args.root).resolve()
+        src_path = os.path.realpath(args.root)
 
     if args.definition:
-        def_path = Path(args.definition).resolve()
+        def_path = os.path.realpath(args.definition)
 
     if args.ignore:
-        ignore_path = Path(args.ignore).resolve()
+        ignore_path = os.path.realpath(args.ignore)
 
     if args.path:
-        astyle_path = Path(args.path).resolve() / astyle_cmd
-        checkPath(astyle_path, "Could not find Astyle binary!")
-    else:
-        astyle_path = Path(astyle_cmd)
+        astyle_path = os.path.realpath(args.path)
+        checkPath(
+            os.path.join(astyle_path, astyle_cmd), "Could not find Astyle binary!"
+        )
 
     checkPath(src_path, "Source root path does not exist!")
     checkPath(def_path, "Code style definition file does not exist!")
     checkPath(ignore_path, "Ignore file does not exist!")
     checkAstyle()
     try:
-        astyle_out_path.unlink()
+        os.remove(astyle_out_path)
     except OSError:
         pass
 

@@ -232,12 +232,8 @@
     #define CMSIS_STARTUP_FILE "startup_stm32h742xx.s"
   #elif defined(STM32H743xx)
     #define CMSIS_STARTUP_FILE "startup_stm32h743xx.s"
-  #elif defined(STM32H745xG)
-    #define CMSIS_STARTUP_FILE "startup_stm32h745xg.s"
   #elif defined(STM32H745xx)
     #define CMSIS_STARTUP_FILE "startup_stm32h745xx.s"
-  #elif defined(STM32H747xG)
-    #define CMSIS_STARTUP_FILE "startup_stm32h747xg.s"
   #elif defined(STM32H747xx)
     #define CMSIS_STARTUP_FILE "startup_stm32h747xx.s"
   #elif defined(STM32H750xx)
@@ -414,20 +410,10 @@
     #define CMSIS_STARTUP_FILE "startup_stm32u575xx.s"
   #elif defined(STM32U585xx)
     #define CMSIS_STARTUP_FILE "startup_stm32u585xx.s"
-  #elif defined(STM32U595xx)
-    #define CMSIS_STARTUP_FILE "startup_stm32u595xx.s"
-  #elif defined(STM32U599xx)
-    #define CMSIS_STARTUP_FILE "startup_stm32u599xx.s"
-  #elif defined(STM32U5A5xx)
-    #define CMSIS_STARTUP_FILE "startup_stm32u5a5xx.s"
-  #elif defined(STM32U5A9xx)
-    #define CMSIS_STARTUP_FILE "startup_stm32u5a9xx.s"
   #elif defined(STM32WB10xx)
     #define CMSIS_STARTUP_FILE "startup_stm32wb10xx_cm4.s"
   #elif defined(STM32WB15xx)
     #define CMSIS_STARTUP_FILE "startup_stm32wb15xx_cm4.s"
-  #elif defined(STM32WB1Mxx)
-    #define CMSIS_STARTUP_FILE "startup_stm32wb1mxx_cm4.s"
   #elif defined(STM32WB30xx)
     #define CMSIS_STARTUP_FILE "startup_stm32wb30xx_cm4.s"
   #elif defined(STM32WB35xx)
@@ -446,10 +432,6 @@
     #define CMSIS_STARTUP_FILE "startup_stm32wl55xx_cm0plus.s"
   #elif defined(STM32WL55xx) && defined(USE_CM4_STARTUP_FILE)
     #define CMSIS_STARTUP_FILE "startup_stm32wl55xx_cm4.s"
-  #elif defined(STM32WL5Mxx) && defined(USE_CM0PLUS_STARTUP_FILE)
-    #define CMSIS_STARTUP_FILE "startup_stm32wl5mxx_cm0plus.s"
-  #elif defined(STM32WL5Mxx) && defined(USE_CM4_STARTUP_FILE)
-    #define CMSIS_STARTUP_FILE "startup_stm32wl5mxx_cm4.s"
   #elif defined(STM32WLE4xx)
     #define CMSIS_STARTUP_FILE "startup_stm32wle4xx.s"
   #elif defined(STM32WLE5xx)

@@ -647,3 +647,4 @@ static void UTILS_EnablePLLAndSwitchSystem(
   * @}
   */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -36,6 +36,7 @@
 #include "wiring_pulse.h"
 #include "wiring_shift.h"
 #include "wiring_time.h"
+#include "WInterrupts.h"
 
 #include <board.h>
 
@@ -43,9 +44,8 @@
   #include "HardwareTimer.h"
   #include "Tone.h"
   #include "WCharacter.h"
-  #include "WInterrupts.h"
-  #include "WMath.h"
   #include "WSerial.h"
+  #include "WMath.h"
   #include "WString.h"
 #endif // __cplusplus
 

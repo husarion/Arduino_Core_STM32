@@ -23,8 +23,9 @@ https://github.com/stm32duino/Arduino_Core_STM32
 """
 
 import json
-import sys
 from os.path import isfile, isdir, join
+
+from platformio.util import get_systype
 
 from SCons.Script import COMMAND_LINE_TARGETS, DefaultEnvironment
 
@@ -32,7 +33,6 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 board_config = env.BoardConfig()
 
-IS_WINDOWS = sys.platform.startswith("win")
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoststm32")
 CMSIS_DIR = join(platform.get_package_dir("framework-cmsis"), "CMSIS")
 assert isdir(FRAMEWORK_DIR)
@@ -52,7 +52,7 @@ variants_dir = (
 )
 variant_dir = join(variants_dir, variant)
 inc_variant_dir = variant_dir
-if not IS_WINDOWS and not (
+if "windows" not in get_systype().lower() and not (
     set(["_idedata", "idedata"]) & set(COMMAND_LINE_TARGETS) and " " not in variant_dir
 ):
     inc_variant_dir = variant_dir.replace("(", r"\(").replace(")", r"\)")
@@ -116,14 +116,15 @@ def process_usb_configuration(cpp_defines):
 
 
 def get_arm_math_lib(cpu):
-    if "m33" in cpu:
+    core = board_config.get("build.cpu")
+    if "m33" in core:
         return "arm_ARMv8MMLlfsp_math"
-    elif "m4" in cpu:
+    elif "m4" in core:
         return "arm_cortexM4lf_math"
-    elif "m7" in cpu:
+    elif "m7" in core:
         return "arm_cortexM7lfsp_math"
 
-    return "arm_cortex%sl_math" % cpu[7:9].upper()
+    return "arm_cortex%sl_math" % core[7:9].upper()
 
 
 def configure_application_offset(mcu, upload_protocol):
@@ -154,6 +155,16 @@ def configure_application_offset(mcu, upload_protocol):
 
     # LD_FLASH_OFFSET is mandatory even if there is no offset
     env.Append(LINKFLAGS=["-Wl,--defsym=LD_FLASH_OFFSET=%s" % hex(offset)])
+
+
+if (
+    any(cpu in board_config.get("build.cpu") for cpu in ("cortex-m4", "cortex-m7"))
+    and "stm32wl" not in mcu
+):
+    env.Append(
+        CCFLAGS=["-mfpu=fpv4-sp-d16", "-mfloat-abi=hard"],
+        LINKFLAGS=["-mfpu=fpv4-sp-d16", "-mfloat-abi=hard"],
+    )
 
 
 def load_boards_remap():
@@ -201,23 +212,11 @@ def get_arduino_board_id(board_config, mcu):
 
     return board_id.upper()
 
-board_id = get_arduino_board_id(board_config, mcu)
-machine_flags = [
-    "-mcpu=%s" % board_config.get("build.cpu"),
-    "-mthumb",
-]
 
-if (
-    any(cpu in board_config.get("build.cpu") for cpu in ("cortex-m33", "cortex-m4", "cortex-m7"))
-    and "stm32wl" not in mcu
-):
-    machine_flags.extend(["-mfpu=fpv4-sp-d16", "-mfloat-abi=hard"])
+board_id = get_arduino_board_id(board_config, mcu)
 
 env.Append(
-    ASFLAGS=machine_flags,
-    ASPPFLAGS=[
-        "-x", "assembler-with-cpp",
-    ],
+    ASFLAGS=["-x", "assembler-with-cpp"],
     CFLAGS=["-std=gnu11"],
     CXXFLAGS=[
         "-std=gnu++14",
@@ -226,12 +225,15 @@ env.Append(
         "-fno-exceptions",
         "-fno-use-cxa-atexit",
     ],
-    CCFLAGS=machine_flags + [
+    CCFLAGS=[
         "-Os",  # optimize for size
+        "-mcpu=%s" % board_config.get("build.cpu"),
+        "-mthumb",
         "-ffunction-sections",  # place each function in its own section
         "-fdata-sections",
         "-nostdlib",
-        "--param", "max-inline-insns-single=500",
+        "--param",
+        "max-inline-insns-single=500",
     ],
     CPPDEFINES=[
         series,
@@ -327,8 +329,10 @@ env.Append(
         join(CMSIS_DIR, "DSP", "PrivateInclude"),
         join(FRAMEWORK_DIR, "cores", "arduino"),
     ],
-    LINKFLAGS=machine_flags + [
+    LINKFLAGS=[
         "-Os",
+        "-mthumb",
+        "-mcpu=%s" % board_config.get("build.cpu"),
         "--specs=nano.specs",
         "-Wl,--gc-sections,--relax",
         "-Wl,--check-sections",
@@ -383,6 +387,9 @@ process_standard_library_configuration(cpp_defines)
 process_usb_configuration(cpp_defines)
 process_usb_speed_configuration(cpp_defines)
 process_usart_configuration(cpp_defines)
+
+# copy CCFLAGS to ASFLAGS (-x assembler-with-cpp mode)
+env.Append(ASFLAGS=env.get("CCFLAGS", [])[:])
 
 env.Append(
     LIBSOURCE_DIRS=[

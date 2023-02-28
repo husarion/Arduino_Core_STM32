@@ -6,7 +6,7 @@
  * @brief STM32 core version number
  */
 #define STM32_CORE_VERSION_MAJOR    (0x02U) /*!< [31:24] major version */
-#define STM32_CORE_VERSION_MINOR    (0x05U) /*!< [23:16] minor version */
+#define STM32_CORE_VERSION_MINOR    (0x02U) /*!< [23:16] minor version */
 #define STM32_CORE_VERSION_PATCH    (0x00U) /*!< [15:8]  patch version */
 /*
  * Extra label for development:
@@ -91,20 +91,6 @@
 #endif
 
 /**
- * Some mcu have single AF and thus only AF mode should be configured.
- * No AFRL/AFRG registers exists so they should not be configured.
- * In that case the AF does not exists so defining the linked AF
- * to 0x7F (max value of the AFNUM i.e. STM_PIN_AFNUM_MASK)
- * See GitHub issue #1798.
- */
-#if defined(STM32F0xx) && !defined(GPIO_AF0_TIM3)
-  #define GPIO_AF0_TIM3 STM_PIN_AFNUM_MASK
-#endif
-#if defined(STM32L0xx) && !defined(GPIO_AF1_SPI1)
-  #define GPIO_AF1_SPI1 STM_PIN_AFNUM_MASK
-#endif
-
-/**
  * Libc porting layers
  */
 #if defined (  __GNUC__  ) /* GCC CS3 */
@@ -118,22 +104,9 @@ extern "C" {
 // weaked functions declaration
 void SystemClock_Config(void);
 
-#if defined(NDEBUG)
-#if !defined(_Error_Handler)
-#define _Error_Handler(str, value) \
-  while (1) {\
-  }
-#endif
-#if !defined(Error_Handler)
-#define Error_Handler() \
-  while (1) {\
-  }
-#endif
-#else
 void _Error_Handler(const char *, int);
 
 #define Error_Handler() _Error_Handler(__FILE__, __LINE__)
-#endif
 
 #ifdef __cplusplus
 } // extern "C"

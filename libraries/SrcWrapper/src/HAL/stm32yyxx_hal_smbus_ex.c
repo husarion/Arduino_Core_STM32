@@ -6,16 +6,12 @@
   #include "stm32g0xx_hal_smbus_ex.c"
 #elif STM32G4xx
   #include "stm32g4xx_hal_smbus_ex.c"
-#elif STM32H7xx
-  #include "stm32h7xx_hal_smbus_ex.c"
 #elif STM32L0xx
   #include "stm32l0xx_hal_smbus_ex.c"
 #elif STM32L4xx
   #include "stm32l4xx_hal_smbus_ex.c"
 #elif STM32L5xx
   #include "stm32l5xx_hal_smbus_ex.c"
-#elif STM32MP1xx
-  #include "stm32mp1xx_hal_smbus_ex.c"
 #elif STM32U5xx
   #include "stm32u5xx_hal_smbus_ex.c"
 #elif STM32WBxx

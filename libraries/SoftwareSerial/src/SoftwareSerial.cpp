@@ -157,8 +157,6 @@ bool SoftwareSerial::listen()
     active_listener = this;
     if (!_half_duplex) {
       active_in = this;
-    } else if (!active_out) {
-      setRXTX(true);
     }
     return true;
   }

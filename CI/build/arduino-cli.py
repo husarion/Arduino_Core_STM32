@@ -90,8 +90,8 @@ skip_count = 0
 
 # error or fatal error
 fork_pattern = re.compile(r"^Error during build: fork/exec")
-error_pattern = re.compile(r":\d+:\d*:?\s.*error:\s|^Error:|fatal error:")
-ld_pattern = re.compile("arm-none-eabi/bin/ld\.?e?x?e?:")
+error_pattern = re.compile(r":\d+:\d+:\s.*error:\s|^Error:")
+ld_pattern = re.compile("arm-none-eabi/bin/ld:")
 overflow_pattern = re.compile(
     r"(will not fit in |section .+ is not within )?region( .+ overflowed by [\d]+ bytes)?"
 )
@@ -325,8 +325,8 @@ def load_core_config():
     global arch
     cores_config_filename = ""
     if args.config:
-        cores_config_filename = Path(args.config)
-        assert cores_config_filename.exists(), f"{args.config} not found"
+        assert args.config.exists(), f"{args.config} not found"
+        cores_config_filename = args.config
     else:
         if args.ci:
             cores_config_filename = cores_config_file_ci
@@ -584,7 +584,6 @@ def check_status(status, build_conf, boardKo, nb_build_conf):
         # Check if failed due to a region overflowed
         logFile = build_conf[idx_log] / f"{sketch_name}.log"
         error_found = False
-        overflow_found = False
         for i, line in enumerate(open(logFile)):
             if error_pattern.search(line):
                 error_found = True
@@ -594,20 +593,17 @@ def check_status(status, build_conf, boardKo, nb_build_conf):
                 # If one ld line is not for region overflowed --> failed
                 if overflow_pattern.search(line) is None:
                     error_found = True
-                else:
-                    overflow_found = True
             if error_found:
+                result = ffail
+                boardKo.append(build_conf[idx_b_name])
+                if args.ci:
+                    cat(logFile)
+                nb_build_failed += 1
                 break
-        # Succeeded if overflow is found and no other error found
-        if overflow_found and not error_found:
+        else:
+            # else consider it succeeded
             result = "\033[32msucceeded*\033[0m"
             nb_build_passed += 1
-        else:
-            result = ffail
-            boardKo.append(build_conf[idx_b_name])
-            if args.ci:
-                cat(logFile)
-            nb_build_failed += 1
     else:
         result = "\033[31merror\033[0m"
         boardKo.append(build_conf[idx_b_name])

@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -83,7 +84,7 @@ extern "C" {
   * @{
   */
 
-/** @addtogroup I2CEx_Exported_Functions_Group1 Filter Mode Functions
+/** @addtogroup I2CEx_Exported_Functions_Group1 I2C Extended Filter Mode Functions
   * @{
   */
 /* Peripheral Control functions  ************************************************/
@@ -93,7 +94,7 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_
   * @}
   */
 
-/** @addtogroup I2CEx_Exported_Functions_Group2 WakeUp Mode Functions
+/** @addtogroup I2CEx_Exported_Functions_Group2 I2C Extended WakeUp Mode Functions
   * @{
   */
 HAL_StatusTypeDef HAL_I2CEx_EnableWakeUp(I2C_HandleTypeDef *hi2c);
@@ -102,7 +103,7 @@ HAL_StatusTypeDef HAL_I2CEx_DisableWakeUp(I2C_HandleTypeDef *hi2c);
   * @}
   */
 
-/** @addtogroup I2CEx_Exported_Functions_Group3 Fast Mode Plus Functions
+/** @addtogroup I2CEx_Exported_Functions_Group3 I2C Extended FastModePlus Functions
   * @{
   */
 void HAL_I2CEx_EnableFastModePlus(uint32_t ConfigFastModePlus);
@@ -110,6 +111,7 @@ void HAL_I2CEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 /**
   * @}
   */
+
 
 /**
   * @}
@@ -167,3 +169,5 @@ void HAL_I2CEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 #endif
 
 #endif /* STM32L5xx_HAL_I2C_EX_H */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

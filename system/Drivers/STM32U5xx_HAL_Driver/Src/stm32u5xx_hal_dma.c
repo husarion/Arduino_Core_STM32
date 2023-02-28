@@ -1177,8 +1177,6 @@ HAL_StatusTypeDef HAL_DMA_RegisterCallback(DMA_HandleTypeDef *const hdma,
 
       default:
       {
-        /* Update error status */
-        status = HAL_ERROR;
         break;
       }
     }
@@ -1544,7 +1542,7 @@ HAL_StatusTypeDef HAL_DMA_GetLockChannelAttributes(DMA_HandleTypeDef const *cons
   uint32_t channel_idx;
 
   /* Check the DMA peripheral handle and lock state parameters */
-  if ((hdma == NULL) || (pLockState == NULL))
+  if (hdma == NULL)
   {
     return HAL_ERROR;
   }

@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                       opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -626,10 +627,7 @@ uint32_t LL_RCC_GetRNGClockFreq(uint32_t RNGxSource)
     default:
       if (LL_RCC_PLL_IsReady() == 1U)
       {
-        if (LL_RCC_PLL_IsEnabledDomain_RNG() == 1U)
-        {
-          rng_frequency = RCC_PLL_GetFreqDomain_RNG();
-        }
+        rng_frequency = RCC_PLL_GetFreqDomain_RNG();
       }
       break;
   }
@@ -656,10 +654,7 @@ uint32_t LL_RCC_GetI2SClockFreq(uint32_t I2SxSource)
     case LL_RCC_I2S2_CLKSOURCE_PLL:    /* I2S2 Clock is PLL"P" */
       if (LL_RCC_PLL_IsReady() == 1U)
       {
-        if (LL_RCC_PLL_IsEnabledDomain_I2S() == 1U)
-        {
-          i2s_frequency = RCC_PLL_GetFreqDomain_I2S();
-        }
+        i2s_frequency = RCC_PLL_GetFreqDomain_I2S();
       }
       break;
 
@@ -708,10 +703,7 @@ uint32_t LL_RCC_GetADCClockFreq(uint32_t ADCxSource)
     case LL_RCC_ADC_CLKSOURCE_PLL:           /* PLL clock used as ADC clock source */
       if (LL_RCC_PLL_IsReady() == 1U)
       {
-        if (LL_RCC_PLL_IsEnabledDomain_ADC() == 1U)
-        {
-          adc_frequency = RCC_PLL_GetFreqDomain_ADC();
-        }
+        adc_frequency = RCC_PLL_GetFreqDomain_ADC();
       }
       break;
     case LL_RCC_ADC_CLKSOURCE_NONE:          /* No clock used as ADC clock source */
@@ -1098,3 +1090,5 @@ static uint32_t RCC_PLL_GetFreqDomain_I2S(void)
   */
 
 #endif /* USE_FULL_LL_DRIVER */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2020, STMicroelectronics
+ * Copyright (c) 2020-2021, STMicroelectronics
  * All rights reserved.
  *
  * This software component is licensed by ST under BSD 3-Clause license,
@@ -12,7 +12,8 @@
  */
 /*
  * Automatically generated from STM32F051K6Tx.xml, STM32F051K8Tx.xml
- * CubeMX DB release 6.0.70
+ * STM32F051T8Yx.xml, STM32F058T8Yx.xml
+ * CubeMX DB release 6.0.30
  */
 #if !defined(CUSTOM_PERIPHERAL_PINS)
 #include "Arduino.h"

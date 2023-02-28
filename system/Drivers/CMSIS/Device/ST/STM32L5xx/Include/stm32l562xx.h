@@ -7,17 +7,18 @@
   *          This file contains:
   *           - Data structures and the address mapping for all peripherals
   *           - Peripheral's registers declarations and bits definition
-  *           - Macros to access peripheral's registers hardware
+  *           - Macros to access peripheral’s registers hardware
   *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under Apache License, Version 2.0,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -43,10 +44,7 @@ extern "C" {
   * @{
   */
 
-/**
-  * @brief stm32l562xx Interrupt Number Definition, according to the selected device
-  *        in @ref Library_configuration_section
-  */
+
 
 /* =========================================================================================================================== */
 /* ================                                Interrupt Number Definition                                ================ */
@@ -217,11 +215,11 @@ typedef enum
 #define __FPU_PRESENT             1U        /* FPU present */
 #define __DSP_PRESENT             1U        /* DSP extension present */
 
-#include <core_cm33.h>                      /*!< ARM Cortex-M33 processor and core peripherals */
-#include "system_stm32l5xx.h"               /*!< STM32L5xx System */
-
-
 /** @} */ /* End of group Configuration_of_CMSIS */
+
+
+#include <core_cm33.h>                       /*!< ARM Cortex-M33 processor and core peripherals */
+#include "system_stm32l5xx.h"                /*!< STM32L5xx System */
 
 
 /* =========================================================================================================================== */
@@ -1376,7 +1374,7 @@ typedef struct
   #pragma pop
 #elif defined (__ICCARM__)
   /* leave anonymous unions enabled */
-#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+#elif (__ARMCC_VERSION >= 6010050)
   #pragma clang diagnostic pop
 #elif defined (__GNUC__)
   /* anonymous unions are enabled by default */
@@ -1804,12 +1802,12 @@ typedef struct
 
 /**
   * @brief  Prototype of RSSLIB Close and exit HDP Function
-  * @details This function close the requested hdp area passed in input
+  * @detail This function close the requested hdp area passed in input
   *         parameter and jump to the reset handler present within the
   *         Vector table. The function does not return on successful execution.
   * @param  HdpArea notifies which hdp area to close, can be a combination of
   *         hdpa area 1 and hdp area 2
-  * @param  VectorTableAddr pointer on the vector table containing the reset handler the function
+  * @param  pointer on the vector table containing the reset handler the function
   *         jumps to.
   * @retval RSSLIB_RSS_ERROR on error on input parameter, otherwise does not return.
   */
@@ -11729,9 +11727,6 @@ typedef struct
 /*                         Reset and Clock Control                            */
 /*                                                                            */
 /******************************************************************************/
-#define RCC_MAX_FREQUENCY           110000000U         /*!< Max frequency of family in Hz*/
-#define RCC_MAX_FREQUENCY_MHZ       110U               /*!< Max frequency of family in MHz*/
-
 /********************  Bit definition for RCC_CR register  ********************/
 #define RCC_CR_MSION_Pos                     (0U)
 #define RCC_CR_MSION_Msk                     (0x1UL << RCC_CR_MSION_Pos)       /*!< 0x00000001 */
@@ -21200,3 +21195,5 @@ typedef struct
 #endif
 
 #endif  /* STM32L562xx_H */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

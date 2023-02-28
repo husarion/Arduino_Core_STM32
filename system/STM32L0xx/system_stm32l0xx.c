@@ -63,32 +63,33 @@
   * @{
   */
 /************************* Miscellaneous Configuration ************************/
-/* Note: Following vector table addresses must be defined in line with linker
-         configuration. */
-
-/*!< Uncomment the following line and change the address
-     if you need to relocate your vector Table at a custom base address (+ VECT_TAB_OFFSET) */
-/* #define VECT_TAB_BASE_ADDRESS 0x08000000 */
-
-/*!< Uncomment the following line if you need to relocate your vector Table
-     in Sram else user remap will be done by default in Flash. */
-/* #define VECT_TAB_SRAM */
 
 #ifndef VECT_TAB_OFFSET
-#define VECT_TAB_OFFSET         0x00000000U     /*!< Vector Table base offset field.
-                                                     This value must be a multiple of 0x100. */
+#define VECT_TAB_OFFSET  0x00U /*!< Vector Table base offset field. 
+                                   This value must be a multiple of 0x100. */
+#else
+define USER_VECT_TAB_ADDRESS
 #endif
 
-#ifndef VECT_TAB_BASE_ADDRESS
+/* Note: Following vector table addresses must be defined in line with linker
+         configuration. */
+/*!< Uncomment the following line if you need to relocate the vector table
+     anywhere in Flash or Sram, else the vector table is kept at the automatic
+     remap of boot address selected */
+/* #define USER_VECT_TAB_ADDRESS */
+
+#if defined(USER_VECT_TAB_ADDRESS)
+/*!< Uncomment the following line if you need to relocate your vector Table
+     in Sram else user remap will be done in Flash. */
+/* #define VECT_TAB_SRAM */
 #if defined(VECT_TAB_SRAM)
 #define VECT_TAB_BASE_ADDRESS   SRAM_BASE       /*!< Vector Table base address field.
-                                                     This value must be a multiple of 0x100. */
+                                                     This value must be a multiple of 0x200. */
 #else
 #define VECT_TAB_BASE_ADDRESS   FLASH_BASE      /*!< Vector Table base address field.
-                                                     This value must be a multiple of 0x100. */
+                                                     This value must be a multiple of 0x200. */
 #endif /* VECT_TAB_SRAM */
-#endif /* VECT_TAB_BASE_ADDRESS */
-
+#endif /* USER_VECT_TAB_ADDRESS */
 
 /******************************************************************************/
 /**
@@ -143,35 +144,30 @@
 void SystemInit (void)
 {    
 /*!< Set MSION bit */
-  RCC->CR |= 0x00000100U;
+  RCC->CR |= (uint32_t)0x00000100U;
 
   /*!< Reset SW[1:0], HPRE[3:0], PPRE1[2:0], PPRE2[2:0], MCOSEL[2:0] and MCOPRE[2:0] bits */
-  RCC->CFGR =  0x00000000U;
+  RCC->CFGR &= (uint32_t) 0x88FF400CU;
  
   /*!< Reset HSION, HSIDIVEN, HSEON, CSSON and PLLON bits */
-  RCC->CR = 0x00000100U;
+  RCC->CR &= (uint32_t)0xFEF6FFF6U;
   
   /*!< Reset HSI48ON  bit */
-  RCC->CRRCR &= 0xFFFFFFFEU;
+  RCC->CRRCR &= (uint32_t)0xFFFFFFFEU;
   
   /*!< Reset HSEBYP bit */
-  RCC->CR &= 0xFFFBFFFFU;
+  RCC->CR &= (uint32_t)0xFFFBFFFFU;
 
   /*!< Reset PLLSRC, PLLMUL[3:0] and PLLDIV[1:0] bits */
-  RCC->CFGR &= 0xFF02FFFFU;
+  RCC->CFGR &= (uint32_t)0xFF02FFFFU;
 
-  /* Disable all interrupts and clar flags */
+  /*!< Disable all interrupts */
   RCC->CIER = 0x00000000U;
-#if defined(RCC_CICR_HSI48RDYC)
-  RCC->CICR = 0x000001FF;
-#elif (RCC_CICR_CSSHSEC)
-  RCC->CICR = 0x000001BFU;
-#else
-  RCC->CICR = 0x000000BFU;
-#endif
   
   /* Configure the Vector Table location add offset address ------------------*/
-  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET;
+#if defined (USER_VECT_TAB_ADDRESS)
+  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+#endif /* USER_VECT_TAB_ADDRESS */
 }
 
 /**

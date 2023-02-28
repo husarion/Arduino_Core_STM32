@@ -10,12 +10,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -111,26 +112,22 @@ void HAL_PWR_DeInit(void)
 #endif
 
   /* Clear all flags */
-#if defined(DUAL_CORE)
   LL_PWR_WriteReg(SCR,
                   LL_PWR_SCR_CWUF
                   | LL_PWR_SCR_CWRFBUSYF
                   | LL_PWR_SCR_CWPVDF
+#if defined(DUAL_CORE)
                   | LL_PWR_SCR_CC2HF
+#endif
                  );
-#else
-    LL_PWR_WriteReg(SCR,
-                  LL_PWR_SCR_CWUF
-                  | LL_PWR_SCR_CWRFBUSYF
-                  | LL_PWR_SCR_CWPVDF
-                 );
-#endif /* DUAL_CORE */
 
+  LL_PWR_WriteReg(EXTSCR,
 #ifdef CORE_CM0PLUS
-  LL_PWR_WriteReg(EXTSCR, LL_PWR_EXTSCR_C2CSSF);
+                  LL_PWR_EXTSCR_C2CSSF
 #else
-  LL_PWR_WriteReg(EXTSCR, LL_PWR_EXTSCR_C1CSSF);
-#endif /* CORE_CM0PLUS */
+                  LL_PWR_EXTSCR_C1CSSF
+#endif
+                 );
 }
 
 
@@ -702,3 +699,4 @@ __weak void HAL_PWR_PVDCallback(void)
   * @}
   */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

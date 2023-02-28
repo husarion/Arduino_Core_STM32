@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the 
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -85,7 +86,7 @@ typedef struct
 /** @defgroup PWR_PVD_Mode  PWR PVD interrupt and event mode
   * @{
   */
-/* Note: On STM32WB series, power PVD event is not available on AIEC lines     */
+/* Note: On STM32WB serie, power PVD event is not available on AIEC lines     */
 /*       (only interruption is available through AIEC line 16).               */
 #define PWR_PVD_MODE_NORMAL                 (0x00000000U)                           /*!< Basic mode is used */
 
@@ -96,7 +97,7 @@ typedef struct
   * @}
   */
 
-/* Note: On STM32WB series, power PVD event is not available on AIEC lines     */
+/* Note: On STM32WB serie, power PVD event is not available on AIEC lines     */
 /*       (only interruption is available through AIEC line 16).               */
 
 /** @defgroup PWR_Low_Power_Mode_Selection  PWR Low Power Mode Selection
@@ -160,7 +161,7 @@ typedef struct
 /** @defgroup PWR_PVD_Mode_Mask PWR PVD Mode Mask
   * @{
   */
-/* Note: On STM32WB series, power PVD event is not available on AIEC lines     */
+/* Note: On STM32WB serie, power PVD event is not available on AIEC lines     */
 /*       (only interruption is available through AIEC line 16).               */
 #define PVD_MODE_IT               (0x00010000U)  /*!< Mask for interruption yielded by PVD threshold crossing */
 #define PVD_RISING_EDGE           (0x00000001U)  /*!< Mask for rising edge set as PVD trigger                 */
@@ -328,7 +329,7 @@ typedef struct
   */
 #define __HAL_PWR_PVD_EXTIC2_DISABLE_IT()  LL_C2_EXTI_DisableIT_0_31(PWR_EXTI_LINE_PVD)
 
-/* Note: On STM32WB series, power PVD event is not available on AIEC lines     */
+/* Note: On STM32WB serie, power PVD event is not available on AIEC lines     */
 /*       (only interruption is available through AIEC line 16).               */
 
 /**
@@ -511,3 +512,4 @@ void              HAL_PWR_DisableSEVOnPend(void);
 
 #endif /* STM32WBxx_HAL_PWR_H */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

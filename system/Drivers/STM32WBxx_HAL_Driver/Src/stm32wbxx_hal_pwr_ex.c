@@ -11,12 +11,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the 
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -643,7 +644,7 @@ void HAL_PWREx_ReleaseCore(uint32_t CPU)
   * @brief Enable SRAM2a content retention in Standby mode.
   * @note  When RRS bit is set, SRAM2a is powered by the low-power regulator in
   *         Standby mode and its content is kept.
-  * @note   On devices STM32WB15xx, STM32WB10xx, STM32WB1Mxx retention is extended
+  * @note   On devices STM32WB15xx, STM32WB10xx, retention is extended
   *         to SRAM1, SRAM2a and SRAM2b.
   * @retval None
   */
@@ -656,7 +657,7 @@ void HAL_PWREx_EnableSRAMRetention(void)
   * @brief Disable SRAM2a content retention in Standby mode.
   * @note  When RRS bit is reset, SRAM2a is powered off in Standby mode
   *        and its content is lost.
-  * @note   On devices STM32WB15xx, STM32WB10xx, STM32WB1Mxx retention is extended
+  * @note   On devices STM32WB15xx, STM32WB10xx, retention is extended
   *         to SRAM1, SRAM2a and SRAM2b.
   * @retval None
   */
@@ -867,7 +868,7 @@ HAL_StatusTypeDef HAL_PWREx_ConfigSMPS(PWR_SMPSTypeDef *sConfigSMPS)
   assert_param(IS_PWR_SMPS_OUTPUT_VOLTAGE(sConfigSMPS->OutputVoltage));
   
   __IO const uint32_t OutputVoltageLevel_calibration = (((*SMPS_VOLTAGE_CAL_ADDR) & SMPS_VOLTAGE_CAL) >> SMPS_VOLTAGE_CAL_POS);  /* SMPS output voltage level calibrated in production */
-  int32_t TrimmingSteps;                         /* Trimming steps between theoretical output voltage and calibrated output voltage */
+  int32_t TrimmingSteps;                         /* Trimming steps between theorical output voltage and calibrated output voltage */
   int32_t OutputVoltageLevelTrimmed;             /* SMPS output voltage level after calibration: trimming value added to required level */
 
   if(OutputVoltageLevel_calibration == 0UL)
@@ -1365,3 +1366,4 @@ __weak void HAL_PWREx_PVM3Callback(void)
   * @}
   */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

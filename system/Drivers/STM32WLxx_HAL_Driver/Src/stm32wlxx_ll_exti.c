@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -23,7 +24,7 @@
 #include "stm32_assert.h"
 #else
 #define assert_param(expr) ((void)0U)
-#endif /* USE_FULL_ASSERT */
+#endif
 
 /** @addtogroup STM32WLxx_LL_Driver
   * @{
@@ -47,14 +48,14 @@
 #define IS_LL_EXTI_LINE_32_63(__VALUE__)             (((__VALUE__) & ~LL_EXTI_LINE_ALL_32_63) == 0x00000000U)
 
 #define IS_LL_EXTI_MODE(__VALUE__)                   (((__VALUE__) == LL_EXTI_MODE_IT)            \
-                                                      || ((__VALUE__) == LL_EXTI_MODE_EVENT)      \
-                                                      || ((__VALUE__) == LL_EXTI_MODE_IT_EVENT))
+                                                   || ((__VALUE__) == LL_EXTI_MODE_EVENT)         \
+                                                   || ((__VALUE__) == LL_EXTI_MODE_IT_EVENT))
 
 
 #define IS_LL_EXTI_TRIGGER(__VALUE__)                (((__VALUE__) == LL_EXTI_TRIGGER_NONE)       \
-                                                      || ((__VALUE__) == LL_EXTI_TRIGGER_RISING)  \
-                                                      || ((__VALUE__) == LL_EXTI_TRIGGER_FALLING) \
-                                                      || ((__VALUE__) == LL_EXTI_TRIGGER_RISING_FALLING))
+                                                   || ((__VALUE__) == LL_EXTI_TRIGGER_RISING)     \
+                                                   || ((__VALUE__) == LL_EXTI_TRIGGER_FALLING)    \
+                                                   || ((__VALUE__) == LL_EXTI_TRIGGER_RISING_FALLING))
 
 /**
   * @}
@@ -108,28 +109,28 @@ ErrorStatus LL_EXTI_DeInit(void)
   LL_EXTI_WriteReg(C2IMR1, 0x00000000U);
 #else
   LL_EXTI_WriteReg(IMR1, 0x00000000U);
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
 
   /* Event mask register set to default reset values */
 #if defined(DUAL_CORE) && defined (CORE_CM0PLUS)
   LL_EXTI_WriteReg(C2EMR1, 0x00000000U);
 #else
   LL_EXTI_WriteReg(EMR1, 0x00000000U);
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
 
   /* Interrupt mask register 2 set to default reset values */
 #if defined(DUAL_CORE) && defined (CORE_CM0PLUS)
   LL_EXTI_WriteReg(C2IMR2, 0x00000000U);
 #else
   LL_EXTI_WriteReg(IMR2, 0x00000000U);
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
 
   /* Event mask register 2 set to default reset values */
 #if defined(DUAL_CORE) && defined (CORE_CM0PLUS)
   LL_EXTI_WriteReg(C2EMR2, 0x00000000U);
 #else
   LL_EXTI_WriteReg(EMR2, 0x00000000U);
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
 
   return SUCCESS;
 }
@@ -202,7 +203,7 @@ ErrorStatus LL_EXTI_Init(LL_EXTI_InitTypeDef *EXTI_InitStruct)
         default:
           status = ERROR;
           break;
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
       }
       if (EXTI_InitStruct->Trigger != LL_EXTI_TRIGGER_NONE)
       {
@@ -277,7 +278,7 @@ ErrorStatus LL_EXTI_Init(LL_EXTI_InitTypeDef *EXTI_InitStruct)
         default:
           status = ERROR;
           break;
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
       }
       if (EXTI_InitStruct->Trigger != LL_EXTI_TRIGGER_NONE)
       {
@@ -323,7 +324,7 @@ ErrorStatus LL_EXTI_Init(LL_EXTI_InitTypeDef *EXTI_InitStruct)
     /* De-configure EXTI Lines in range from 32 to 63 */
     LL_EXTI_DisableIT_32_63(EXTI_InitStruct->Line_32_63);
     LL_EXTI_DisableEvent_32_63(EXTI_InitStruct->Line_32_63);
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
   }
   return status;
 }
@@ -361,3 +362,5 @@ void LL_EXTI_StructInit(LL_EXTI_InitTypeDef *EXTI_InitStruct)
   */
 
 #endif /* USE_FULL_LL_DRIVER */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -71,8 +71,6 @@ struct serial_s {
   int (*tx_callback)(serial_t *);
   PinName pin_tx;
   PinName pin_rx;
-  PinName pin_rts;
-  PinName pin_cts;
   IRQn_Type irq;
   uint8_t index;
   uint8_t recv;
@@ -116,9 +114,6 @@ struct serial_s {
 #elif defined(LPUART1_BASE)
 #define USART3_IRQn USART3_4_LPUART1_IRQn
 #define USART3_IRQHandler USART3_4_LPUART1_IRQHandler
-#elif defined(USART5_BASE)
-#define USART3_IRQn USART3_4_5_6_IRQn
-#define USART3_IRQHandler USART3_4_5_6_IRQHandler
 #else
 #define USART3_IRQn USART3_4_IRQn
 #define USART3_IRQHandler USART3_4_IRQHandler
@@ -143,8 +138,6 @@ struct serial_s {
 #define USART4_IRQn USART3_4_5_6_LPUART1_IRQn
 #elif defined(LPUART1_BASE)
 #define USART4_IRQn USART3_4_LPUART1_IRQn
-#elif defined(USART5_BASE)
-#define USART4_IRQn USART3_4_5_6_IRQn
 #else
 #define USART4_IRQn USART3_4_IRQn
 #endif
@@ -162,8 +155,6 @@ struct serial_s {
 #elif defined(STM32G0xx)
 #if defined(LPUART2_BASE)
 #define USART5_IRQn USART3_4_5_6_LPUART1_IRQn
-#elif defined(USART5_BASE)
-#define USART5_IRQn USART3_4_5_6_IRQn
 #endif
 #elif defined(STM32L0xx)
 #define USART5_IRQn USART4_5_IRQn
@@ -181,8 +172,6 @@ struct serial_s {
 #elif defined(STM32G0xx)
 #if defined(LPUART2_BASE)
 #define USART6_IRQn USART3_4_5_6_LPUART1_IRQn
-#elif defined(USART5_BASE)
-#define USART6_IRQn USART3_4_5_6_IRQn
 #endif
 #endif /* STM32F0xx */
 #endif
@@ -228,6 +217,7 @@ void uart_deinit(serial_t *obj);
 #if defined(HAL_PWR_MODULE_ENABLED) && (defined(UART_IT_WUF) || defined(LPUART1_BASE))
 void uart_config_lowpower(serial_t *obj);
 #endif
+size_t uart_write(serial_t *obj, uint8_t data, uint16_t size);
 int uart_getc(serial_t *obj, unsigned char *c);
 void uart_attach_rx_callback(serial_t *obj, void (*callback)(serial_t *));
 void uart_attach_tx_callback(serial_t *obj, int (*callback)(serial_t *), size_t size);

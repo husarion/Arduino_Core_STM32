@@ -11,18 +11,6 @@
   *              10 ms or 100 ms, depending of above global variable value.
   *           + HAL_IncTick is called inside the HAL_RTCEx_WakeUpTimerEventCallback
   *           + HSE (default), LSE or LSI can be selected as RTC clock source
-  *
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
  @verbatim
   ==============================================================================
                         ##### How to use this driver #####
@@ -34,6 +22,17 @@
        HAL_RTC_MODULE_ENABLED define in stm32l5xx_hal_conf.h
 
   @endverbatim
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
+  *
   ******************************************************************************
   */
 
@@ -94,7 +93,7 @@ void RTC_IRQHandler(void);
   */
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
-  HAL_StatusTypeDef status;
+  HAL_StatusTypeDef status = HAL_OK;
   __IO uint32_t counter = 0U;
 
   RCC_OscInitTypeDef        RCC_OscInitStruct;
@@ -105,14 +104,14 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   if ((uint32_t)uwTickFreq != 0U)
   {
 #ifdef RTC_CLOCK_SOURCE_LSE
-    /* Configure LSE as RTC clock source */
+    /* Configue LSE as RTC clock source */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE;
     RCC_OscInitStruct.LSEState = RCC_LSE_ON_RTC_ONLY;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
 
     PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
 #elif defined (RTC_CLOCK_SOURCE_LSI)
-    /* Configure LSI as RTC clock source */
+    /* Configue LSI as RTC clock source */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI;
     RCC_OscInitStruct.LSIState = RCC_LSI_ON;
     RCC_OscInitStruct.LSIDiv = RCC_LSI_DIV1;
@@ -120,7 +119,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 
     PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
 #elif defined (RTC_CLOCK_SOURCE_HSE)
-    /* Configure HSE as RTC clock source */
+    /* Configue HSE as RTC clock source */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
@@ -177,8 +176,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
           /* Wait till RTC WUTWF flag is set  */
           while (__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hRTC_Handle, RTC_FLAG_WUTWF) == 0U)
           {
-            counter++;
-            if (counter == (SystemCoreClock / 56U))
+            if (counter++ == (SystemCoreClock / 56U))
             {
               status = HAL_ERROR;
               break;
@@ -301,3 +299,4 @@ void RTC_IRQHandler(void)
   * @}
   */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

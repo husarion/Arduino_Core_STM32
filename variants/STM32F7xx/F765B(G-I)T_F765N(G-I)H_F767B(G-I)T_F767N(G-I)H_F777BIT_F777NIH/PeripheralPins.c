@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2020, STMicroelectronics
+ * Copyright (c) 2020-2021, STMicroelectronics
  * All rights reserved.
  *
  * This software component is licensed by ST under BSD 3-Clause license,
@@ -11,10 +11,16 @@
  *******************************************************************************
  */
 /*
- * Automatically generated from STM32F765B(G-I)Tx.xml, STM32F765N(G-I)Hx.xml
- * STM32F767B(G-I)Tx.xml, STM32F767N(G-I)Hx.xml
- * STM32F777BITx.xml, STM32F777NIHx.xml
- * CubeMX DB release 6.0.70
+ * Automatically generated from STM32F765B(G-I)Tx.xml, STM32F765I(G-I)Kx.xml
+ * STM32F765I(G-I)Tx.xml, STM32F765N(G-I)Hx.xml
+ * STM32F767B(G-I)Tx.xml, STM32F767I(G-I)Kx.xml
+ * STM32F767I(G-I)Tx.xml, STM32F767N(G-I)Hx.xml
+ * STM32F769B(G-I)Tx.xml, STM32F769NGHx.xml
+ * STM32F769NIHx.xml, STM32F777BITx.xml
+ * STM32F777IIKx.xml, STM32F777IITx.xml
+ * STM32F777NIHx.xml, STM32F779BITx.xml
+ * STM32F779NIHx.xml
+ * CubeMX DB release 6.0.30
  */
 #if !defined(CUSTOM_PERIPHERAL_PINS)
 #include "Arduino.h"
@@ -425,7 +431,7 @@ WEAK const PinMap PinMap_SPI_SSEL[] = {
 
 //*** CAN ***
 
-#if defined(HAL_CAN_MODULE_ENABLED) || defined(HAL_CAN_LEGACY_MODULE_ENABLED)
+#ifdef HAL_CAN_MODULE_ENABLED
 WEAK const PinMap PinMap_CAN_RD[] = {
   {PA_8,  CAN3, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF11_CAN3)},
   {PA_11, CAN1, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF9_CAN1)},
@@ -440,7 +446,7 @@ WEAK const PinMap PinMap_CAN_RD[] = {
 };
 #endif
 
-#if defined(HAL_CAN_MODULE_ENABLED) || defined(HAL_CAN_LEGACY_MODULE_ENABLED)
+#ifdef HAL_CAN_MODULE_ENABLED
 WEAK const PinMap PinMap_CAN_TD[] = {
   {PA_12, CAN1, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF9_CAN1)},
   {PA_15, CAN3, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF11_CAN3)},
@@ -456,7 +462,7 @@ WEAK const PinMap PinMap_CAN_TD[] = {
 
 //*** ETHERNET ***
 
-#if defined(HAL_ETH_MODULE_ENABLED) || defined(HAL_ETH_LEGACY_MODULE_ENABLED)
+#ifdef HAL_ETH_MODULE_ENABLED
 WEAK const PinMap PinMap_Ethernet[] = {
   {PA_0,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_CRS
   {PA_1,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_REF_CLK

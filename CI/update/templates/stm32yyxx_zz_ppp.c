@@ -2,7 +2,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-{% for serie, legacy in serieslist %}
+{% for serie in serieslist %}
   {% if loop.first %}
 #ifdef STM32{{serie.upper()}}xx
   {% else %}
@@ -11,9 +11,6 @@
   {% if type == periph %}
   #include "stm32{{serie}}xx_{{type}}.c"
   {% else %}
-    {% if legacy %}
-  #include "Legacy/stm32{{serie}}xx_{{type}}_{{periph}}.c"
-    {% endif %}
   #include "stm32{{serie}}xx_{{type}}_{{periph}}.c"
   {% endif %}
   {% if loop.last %}

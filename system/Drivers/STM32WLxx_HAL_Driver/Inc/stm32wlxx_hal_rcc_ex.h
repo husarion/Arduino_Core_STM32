@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -346,7 +347,7 @@ typedef struct
 /** @defgroup RCCEx_EXTI_LINE_LSECSS  RCC LSE CSS external interrupt line
   * @{
   */
-#define  RCC_EXTI_LINE_LSECSS      EXTI_IMR1_IM19  /*!< External interrupt line 18 connected to the LSE CSS EXTI Line */
+#define  RCC_EXTI_LINE_LSECSS          EXTI_IMR1_IM19  /*!< External interrupt line 18 connected to the LSE CSS EXTI Line */
 /**
   * @}
   */
@@ -354,7 +355,7 @@ typedef struct
 /** @defgroup RCCEx_EXTI_LINE_HSECSS  RCC HSE CSS external interrupt line
   * @{
   */
-#define  RCC_EXTI_LINE_HSECSS      EXTI_IMR2_IM43  /*!< External interrupt line 43 connected to the HSE CSS EXTI Line */
+#define  RCC_EXTI_LINE_HSECSS          EXTI_IMR2_IM43  /*!< External interrupt line 43 connected to the HSE CSS EXTI Line */
 /**
   * @}
   */
@@ -699,3 +700,5 @@ void              HAL_RCCEx_DisableMSIPLLMode(void);
 #endif
 
 #endif /* STM32WLxx_HAL_RCC_EX_H */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

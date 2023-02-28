@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -42,12 +43,10 @@ extern "C" {
   * @{
   */
 /* CRS IT Error Mask */
-#define  RCC_CRS_IT_ERROR_MASK                 ((uint32_t)(RCC_CRS_IT_TRIMOVF |\
-                                                           RCC_CRS_IT_SYNCERR | RCC_CRS_IT_SYNCMISS))
+#define  RCC_CRS_IT_ERROR_MASK                 ((uint32_t)(RCC_CRS_IT_TRIMOVF | RCC_CRS_IT_SYNCERR | RCC_CRS_IT_SYNCMISS))
 
 /* CRS Flag Error Mask */
-#define RCC_CRS_FLAG_ERROR_MASK                ((uint32_t)(RCC_CRS_FLAG_TRIMOVF |\
-                                                           RCC_CRS_FLAG_SYNCERR | RCC_CRS_FLAG_SYNCMISS))
+#define RCC_CRS_FLAG_ERROR_MASK                ((uint32_t)(RCC_CRS_FLAG_TRIMOVF | RCC_CRS_FLAG_SYNCERR | RCC_CRS_FLAG_SYNCMISS))
 
 /* RNG closk selection CLK48 clock mask */
 #define CLK48_MASK   0x10000000U
@@ -93,129 +92,118 @@ extern "C" {
                                              (((__SELECTION__) & ~RCC_PERIPHCLOCK_ALL) == 0x00u))
 
 #define IS_RCC_USART1CLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_USART1CLKSOURCE_PCLK2)  || \
-   ((__SOURCE__) == RCC_USART1CLKSOURCE_SYSCLK) || \
-   ((__SOURCE__) == RCC_USART1CLKSOURCE_LSE)    || \
-   ((__SOURCE__) == RCC_USART1CLKSOURCE_HSI))
+               (((__SOURCE__) == RCC_USART1CLKSOURCE_PCLK2)  || \
+                ((__SOURCE__) == RCC_USART1CLKSOURCE_SYSCLK) || \
+                ((__SOURCE__) == RCC_USART1CLKSOURCE_LSE)    || \
+                ((__SOURCE__) == RCC_USART1CLKSOURCE_HSI))
 
 #if defined(LPUART1)
 #define IS_RCC_LPUART1CLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_LPUART1CLKSOURCE_PCLK1)  || \
-   ((__SOURCE__) == RCC_LPUART1CLKSOURCE_SYSCLK) || \
-   ((__SOURCE__) == RCC_LPUART1CLKSOURCE_LSE)    || \
-   ((__SOURCE__) == RCC_LPUART1CLKSOURCE_HSI))
+               (((__SOURCE__) == RCC_LPUART1CLKSOURCE_PCLK1)  || \
+                ((__SOURCE__) == RCC_LPUART1CLKSOURCE_SYSCLK) || \
+                ((__SOURCE__) == RCC_LPUART1CLKSOURCE_LSE)    || \
+                ((__SOURCE__) == RCC_LPUART1CLKSOURCE_HSI))
 #endif
 
 #define IS_RCC_I2C1CLKSOURCE(__SOURCE__)   \
-  (((__SOURCE__) == RCC_I2C1CLKSOURCE_PCLK1) || \
-   ((__SOURCE__) == RCC_I2C1CLKSOURCE_SYSCLK)|| \
-   ((__SOURCE__) == RCC_I2C1CLKSOURCE_HSI))
+               (((__SOURCE__) == RCC_I2C1CLKSOURCE_PCLK1) || \
+                ((__SOURCE__) == RCC_I2C1CLKSOURCE_SYSCLK)|| \
+                ((__SOURCE__) == RCC_I2C1CLKSOURCE_HSI))
 
 #if defined(I2C3)
 #define IS_RCC_I2C3CLKSOURCE(__SOURCE__)   \
-  (((__SOURCE__) == RCC_I2C3CLKSOURCE_PCLK1) || \
-   ((__SOURCE__) == RCC_I2C3CLKSOURCE_SYSCLK)|| \
-   ((__SOURCE__) == RCC_I2C3CLKSOURCE_HSI))
+               (((__SOURCE__) == RCC_I2C3CLKSOURCE_PCLK1) || \
+                ((__SOURCE__) == RCC_I2C3CLKSOURCE_SYSCLK)|| \
+                ((__SOURCE__) == RCC_I2C3CLKSOURCE_HSI))
 #endif
 
 #if defined(SAI1)
 #define IS_RCC_SAI1CLK(__SOURCE__)                             \
-  (((__SOURCE__) == RCC_SAI1CLKSOURCE_PLLSAI1) || \
-   ((__SOURCE__) == RCC_SAI1CLKSOURCE_PLL)     || \
-   ((__SOURCE__) == RCC_SAI1CLKSOURCE_HSI)     || \
-   ((__SOURCE__) == RCC_SAI1CLKSOURCE_PIN))
+               (((__SOURCE__) == RCC_SAI1CLKSOURCE_PLLSAI1) || \
+                ((__SOURCE__) == RCC_SAI1CLKSOURCE_PLL)     || \
+                ((__SOURCE__) == RCC_SAI1CLKSOURCE_HSI)     || \
+                ((__SOURCE__) == RCC_SAI1CLKSOURCE_PIN))
 #endif
 
 #define IS_RCC_LPTIM1CLK(__SOURCE__)  \
-  (((__SOURCE__) == RCC_LPTIM1CLKSOURCE_PCLK1) || \
-   ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_LSI)  || \
-   ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_HSI)  || \
-   ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_LSE))
+               (((__SOURCE__) == RCC_LPTIM1CLKSOURCE_PCLK1) || \
+                ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_LSI)  || \
+                ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_HSI)  || \
+                ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_LSE))
 
 #define IS_RCC_LPTIM2CLK(__SOURCE__)  \
-  (((__SOURCE__) == RCC_LPTIM2CLKSOURCE_PCLK1) || \
-   ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_LSI)  || \
-   ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_HSI)  || \
-   ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_LSE))
+               (((__SOURCE__) == RCC_LPTIM2CLKSOURCE_PCLK1) || \
+                ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_LSI)  || \
+                ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_HSI)  || \
+                ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_LSE))
 
 #if defined(RCC_HSI48_SUPPORT)
-#if defined(SAI1)
 #define IS_RCC_RNGCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_RNGCLKSOURCE_HSI48)   || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_PLL)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_MSI)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_PLLSAI1) || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_CLK48)   || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_LSI)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_LSE))
-#else /* SAI1 */
+               (((__SOURCE__) == RCC_RNGCLKSOURCE_HSI48)   || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_PLL)     || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_MSI)     || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_CLK48)   || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_LSI)     || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_LSE))
+#else
 #define IS_RCC_RNGCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_RNGCLKSOURCE_HSI48)   || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_PLL)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_MSI)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_CLK48)   || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_LSI)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_LSE))
-#endif /* SAI1 */
-#else /* RCC_HSI48_SUPPORT */
-#define IS_RCC_RNGCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_RNGCLKSOURCE_PLL)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_MSI)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_CLK48)   || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_LSI)     || \
-   ((__SOURCE__) == RCC_RNGCLKSOURCE_LSE))
-#endif /* RCC_HSI48_SUPPORT */
+               (((__SOURCE__) == RCC_RNGCLKSOURCE_PLL)     || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_MSI)     || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_CLK48)   || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_LSI)     || \
+                ((__SOURCE__) == RCC_RNGCLKSOURCE_LSE))
+#endif
 
 #if defined(USB)
 #if defined(SAI1)
 #define IS_RCC_USBCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_USBCLKSOURCE_HSI48)   || \
-   ((__SOURCE__) == RCC_USBCLKSOURCE_PLLSAI1) || \
-   ((__SOURCE__) == RCC_USBCLKSOURCE_PLL)     || \
-   ((__SOURCE__) == RCC_USBCLKSOURCE_MSI))
+               (((__SOURCE__) == RCC_USBCLKSOURCE_HSI48)   || \
+                ((__SOURCE__) == RCC_USBCLKSOURCE_PLLSAI1) || \
+                ((__SOURCE__) == RCC_USBCLKSOURCE_PLL)     || \
+                ((__SOURCE__) == RCC_USBCLKSOURCE_MSI))
 #else
 #define IS_RCC_USBCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_USBCLKSOURCE_HSI48)   || \
-   ((__SOURCE__) == RCC_USBCLKSOURCE_PLL)     || \
-   ((__SOURCE__) == RCC_USBCLKSOURCE_MSI))
+               (((__SOURCE__) == RCC_USBCLKSOURCE_HSI48)   || \
+                ((__SOURCE__) == RCC_USBCLKSOURCE_PLL)     || \
+                ((__SOURCE__) == RCC_USBCLKSOURCE_MSI))
 #endif
 #endif
 
 #if defined(STM32WB55xx) || defined (STM32WB5Mxx) || defined(STM32WB35xx)
 #define IS_RCC_ADCCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_ADCCLKSOURCE_NONE)    || \
-   ((__SOURCE__) == RCC_ADCCLKSOURCE_PLL)     || \
-   ((__SOURCE__) == RCC_ADCCLKSOURCE_PLLSAI1) || \
-   ((__SOURCE__) == RCC_ADCCLKSOURCE_SYSCLK))
-#elif defined(STM32WB15xx) || defined(STM32WB1Mxx)
+               (((__SOURCE__) == RCC_ADCCLKSOURCE_NONE)    || \
+                ((__SOURCE__) == RCC_ADCCLKSOURCE_PLL)     || \
+                ((__SOURCE__) == RCC_ADCCLKSOURCE_PLLSAI1) || \
+                ((__SOURCE__) == RCC_ADCCLKSOURCE_SYSCLK))
+#elif defined(STM32WB15xx)
 #define IS_RCC_ADCCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_ADCCLKSOURCE_NONE) || \
-   ((__SOURCE__) == RCC_ADCCLKSOURCE_PLL)  || \
-   ((__SOURCE__) == RCC_ADCCLKSOURCE_HSI)  || \
-   ((__SOURCE__) == RCC_ADCCLKSOURCE_SYSCLK))
+               (((__SOURCE__) == RCC_ADCCLKSOURCE_NONE) || \
+                ((__SOURCE__) == RCC_ADCCLKSOURCE_PLL)  || \
+                ((__SOURCE__) == RCC_ADCCLKSOURCE_HSI)  || \
+                ((__SOURCE__) == RCC_ADCCLKSOURCE_SYSCLK))
 #else
 #define IS_RCC_ADCCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_ADCCLKSOURCE_NONE) || \
-   ((__SOURCE__) == RCC_ADCCLKSOURCE_PLL)  || \
-   ((__SOURCE__) == RCC_ADCCLKSOURCE_SYSCLK))
+               (((__SOURCE__) == RCC_ADCCLKSOURCE_NONE) || \
+                ((__SOURCE__) == RCC_ADCCLKSOURCE_PLL)  || \
+                ((__SOURCE__) == RCC_ADCCLKSOURCE_SYSCLK))
 #endif
 
 #define IS_RCC_RFWKPCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_RFWKPCLKSOURCE_NONE) || \
-   ((__SOURCE__) == RCC_RFWKPCLKSOURCE_LSE) || \
-   ((__SOURCE__) == RCC_RFWKPCLKSOURCE_HSE_DIV1024))
+               (((__SOURCE__) == RCC_RFWKPCLKSOURCE_NONE) || \
+                ((__SOURCE__) == RCC_RFWKPCLKSOURCE_LSE) || \
+                ((__SOURCE__) == RCC_RFWKPCLKSOURCE_HSE_DIV1024))
 
 #if defined(RCC_SMPS_SUPPORT)
 #define IS_RCC_SMPSCLKDIV(__DIV__)  \
-  (((__DIV__) == RCC_SMPSCLKDIV_RANGE0) || \
-   ((__DIV__) == RCC_SMPSCLKDIV_RANGE1) || \
-   ((__DIV__) == RCC_SMPSCLKDIV_RANGE2) || \
-   ((__DIV__) == RCC_SMPSCLKDIV_RANGE3))
+               (((__DIV__) == RCC_SMPSCLKDIV_RANGE0) || \
+                ((__DIV__) == RCC_SMPSCLKDIV_RANGE1) || \
+                ((__DIV__) == RCC_SMPSCLKDIV_RANGE2) || \
+                ((__DIV__) == RCC_SMPSCLKDIV_RANGE3))
 
 #define IS_RCC_SMPSCLKSOURCE(__SOURCE__)  \
-  (((__SOURCE__) == RCC_SMPSCLKSOURCE_HSI)    || \
-   ((__SOURCE__) == RCC_SMPSCLKSOURCE_MSI)    || \
-   ((__SOURCE__) == RCC_SMPSCLKSOURCE_HSE))
+               (((__SOURCE__) == RCC_SMPSCLKSOURCE_HSI)    || \
+                ((__SOURCE__) == RCC_SMPSCLKSOURCE_MSI)    || \
+                ((__SOURCE__) == RCC_SMPSCLKSOURCE_HSE))
 #endif
 
 
@@ -556,9 +544,6 @@ typedef struct
 #define RCC_RNGCLKSOURCE_HSI48         (CLK48_MASK | LL_RCC_CLK48_CLKSOURCE_HSI48)  /*!< HSI48 clock divided by 3 selected as RNG clock    */
 #define RCC_RNGCLKSOURCE_PLL           (CLK48_MASK | LL_RCC_CLK48_CLKSOURCE_PLL)    /*!< PLL "Q" clock divided by 3  selected as RNG clock */
 #define RCC_RNGCLKSOURCE_MSI           (CLK48_MASK | LL_RCC_CLK48_CLKSOURCE_MSI)    /*!< MSI clock divided by 3 selected as RNG clock      */
-#if defined(SAI1)
-#define RCC_RNGCLKSOURCE_PLLSAI1       (CLK48_MASK | LL_RCC_CLK48_CLKSOURCE_PLLSAI1)    /*!< PLLSAI1 "Q" clock selected as RNG clock           */
-#endif /* SAI1 */
 #define RCC_RNGCLKSOURCE_CLK48         LL_RCC_RNG_CLKSOURCE_CLK48                   /*!< CLK48 divided by 3 selected as RNG Clock          */
 #define RCC_RNGCLKSOURCE_LSI           LL_RCC_RNG_CLKSOURCE_LSI                     /*!< LSI clock selected as RNG clock                   */
 #define RCC_RNGCLKSOURCE_LSE           LL_RCC_RNG_CLKSOURCE_LSE                     /*!< LSE clock selected as RNG clock                   */
@@ -588,7 +573,7 @@ typedef struct
 #define RCC_ADCCLKSOURCE_NONE          LL_RCC_ADC_CLKSOURCE_NONE      /*!< None clock selected as ADC clock        */
 #if defined(STM32WB55xx) || defined (STM32WB5Mxx) || defined(STM32WB35xx)
 #define RCC_ADCCLKSOURCE_PLLSAI1       LL_RCC_ADC_CLKSOURCE_PLLSAI1   /*!< PLLSAI1 "R" clock selected as ADC clock */
-#elif defined (STM32WB15xx) || defined(STM32WB1Mxx)
+#elif defined (STM32WB15xx)
 #define RCC_ADCCLKSOURCE_HSI           LL_RCC_ADC_CLKSOURCE_HSI       /*!< HSI clock selected as ADC clock */
 #endif
 #define RCC_ADCCLKSOURCE_PLL           LL_RCC_ADC_CLKSOURCE_PLL       /*!< PLL "P" clock selected as ADC clock     */
@@ -615,9 +600,6 @@ typedef struct
 
 #define RCC_RFWKPCLKSOURCE_NONE          LL_RCC_RFWKP_CLKSOURCE_NONE        /*!< None clock selected as RF system wakeup clock                */
 #define RCC_RFWKPCLKSOURCE_LSE           LL_RCC_RFWKP_CLKSOURCE_LSE         /*!< LSE clock selected as RF system wakeup clock                 */
-#if defined(STM32WB15xx) || defined(STM32WB10xx)
-#define RCC_RFWKPCLKSOURCE_LSI           LL_RCC_RFWKP_CLKSOURCE_LSI         /*!< LSI clock selected as RF system wakeup clock                 */
-#endif /* STM32WB15xx || STM32WB10xx */
 #define RCC_RFWKPCLKSOURCE_HSE_DIV1024   LL_RCC_RFWKP_CLKSOURCE_HSE_DIV1024 /*!< HSE clock divided by 1024 selected as RF system wakeup clock */
 
 /**
@@ -791,8 +773,8 @@ typedef struct
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Macros RCCEx Exported Macros
-  * @{
-  */
+ * @{
+ */
 
 /*================================================================================================================*/
 
@@ -825,9 +807,9 @@ typedef struct
   * @retval None
   */
 #define __HAL_RCC_PLLSAI1_CONFIG(__PLLN__, __PLLP__, __PLLQ__, __PLLR__) \
-  MODIFY_REG(RCC->PLLSAI1CFGR, \
-             (RCC_PLLSAI1CFGR_PLLN | RCC_PLLSAI1CFGR_PLLP | RCC_PLLSAI1CFGR_PLLQ | RCC_PLLSAI1CFGR_PLLR), \
-             (((__PLLN__) << RCC_PLLCFGR_PLLN_Pos) | (__PLLP__) | (__PLLQ__) | (__PLLR__)))
+                  MODIFY_REG(RCC->PLLSAI1CFGR, \
+                             (RCC_PLLSAI1CFGR_PLLN | RCC_PLLSAI1CFGR_PLLP | RCC_PLLSAI1CFGR_PLLQ | RCC_PLLSAI1CFGR_PLLR), \
+                             (((__PLLN__) << RCC_PLLCFGR_PLLN_Pos) | (__PLLP__) | (__PLLQ__) | (__PLLR__)))
 
 /**
   * @brief  Macro to configure the PLLSAI1 clock multiplication factor N.
@@ -845,7 +827,7 @@ typedef struct
   * @retval None
   */
 #define __HAL_RCC_PLLSAI1_MULN_CONFIG(__PLLN__) \
-  MODIFY_REG(RCC->PLLSAI1CFGR, RCC_PLLSAI1CFGR_PLLN, (__PLLN__) << RCC_PLLSAI1CFGR_PLLN_Pos)
+                  MODIFY_REG(RCC->PLLSAI1CFGR, RCC_PLLSAI1CFGR_PLLN, (__PLLN__) << RCC_PLLSAI1CFGR_PLLN_Pos)
 
 
 /** @brief  Macro to configure the PLLSAI1 clock division factor P.
@@ -861,7 +843,7 @@ typedef struct
   * @retval None
   */
 #define __HAL_RCC_PLLSAI1_DIVP_CONFIG(__PLLP__) \
-  MODIFY_REG(RCC->PLLSAI1CFGR, RCC_PLLSAI1CFGR_PLLP, (__PLLP__))
+                  MODIFY_REG(RCC->PLLSAI1CFGR, RCC_PLLSAI1CFGR_PLLP, (__PLLP__))
 
 
 /** @brief  Macro to configure the PLLSAI1 clock division factor Q.
@@ -877,7 +859,7 @@ typedef struct
   * @retval None
   */
 #define __HAL_RCC_PLLSAI1_DIVQ_CONFIG(__PLLQ__) \
-  MODIFY_REG(RCC->PLLSAI1CFGR, RCC_PLLSAI1CFGR_PLLQ, (__PLLQ__))
+                  MODIFY_REG(RCC->PLLSAI1CFGR, RCC_PLLSAI1CFGR_PLLQ, (__PLLQ__))
 
 /** @brief  Macro to configure the PLLSAI1 clock division factor R.
   *
@@ -892,7 +874,7 @@ typedef struct
   * @retval None
   */
 #define __HAL_RCC_PLLSAI1_DIVR_CONFIG(__PLLR__) \
-  MODIFY_REG(RCC->PLLSAI1CFGR, RCC_PLLSAI1CFGR_PLLR, (__PLLR__))
+                  MODIFY_REG(RCC->PLLSAI1CFGR, RCC_PLLSAI1CFGR_PLLR, (__PLLR__))
 
 /**
   * @brief  Macros to enable the PLLSAI1.
@@ -1111,28 +1093,24 @@ typedef struct
   *            @arg @ref RCC_RNGCLKSOURCE_HSI48         HSI48 clock divided by 3  selected as RNG clock
   *            @arg @ref RCC_RNGCLKSOURCE_PLL           PLL "Q" clock divided by 3  selected as RNG clock
   *            @arg @ref RCC_RNGCLKSOURCE_MSI           MSI clock divided by 3 selected as RNG clock
-  *            @arg @ref RCC_RNGCLKSOURCE_PLLSAI1       PLLSAI1 "Q" clock selected as RNG (*)
   *            @arg @ref RCC_RNGCLKSOURCE_CLK48         CLK48 divided by 3 selected as RNG Clock  (default HSI48)
   *            @arg @ref RCC_RNGCLKSOURCE_LSI           LSI clock selected as RNG clock
   *            @arg @ref RCC_RNGCLKSOURCE_LSE           LSE clock selected as RNG clock
-  *
-  *         (*) Value not defined in all devices.
-  *
   * @retval None
   */
 #define __HAL_RCC_RNG_CONFIG(__RNG_CLKSOURCE__)          \
   do {                                                   \
     if (((__RNG_CLKSOURCE__) == RCC_RNGCLKSOURCE_LSI)    \
-        || ((__RNG_CLKSOURCE__) == RCC_RNGCLKSOURCE_LSE)    \
-        || ((__RNG_CLKSOURCE__) == RCC_RNGCLKSOURCE_CLK48)) \
+     || ((__RNG_CLKSOURCE__) == RCC_RNGCLKSOURCE_LSE)       \
+     || ((__RNG_CLKSOURCE__) == RCC_RNGCLKSOURCE_CLK48))    \
     {                                                    \
-      LL_RCC_SetRNGClockSource((__RNG_CLKSOURCE__));     \
+     LL_RCC_SetRNGClockSource((__RNG_CLKSOURCE__));         \
     }                                                    \
     else                                                 \
     {                                                    \
-      uint32_t tmp = (__RNG_CLKSOURCE__) &(~CLK48_MASK); \
+      uint32_t tmp = (__RNG_CLKSOURCE__) &(~CLK48_MASK);   \
       LL_RCC_SetRNGClockSource(RCC_RNGCLKSOURCE_CLK48);  \
-      LL_RCC_SetCLK48ClockSource(tmp);                   \
+      LL_RCC_SetCLK48ClockSource(tmp);                      \
     }                                                    \
   } while(0U)
 
@@ -1200,10 +1178,7 @@ typedef struct
   *         This parameter can be one of the following values:
   *            @arg @ref RCC_RFWKPCLKSOURCE_NONE         No clock selected as RFWKP clock
   *            @arg @ref RCC_RFWKPCLKSOURCE_LSE          LSE Clock selected as RFWKP clock
-  *            @arg @ref RCC_RFWKPCLKSOURCE_LSI          LSI Clock selected as RFWKP clock (*)
   *            @arg @ref RCC_RFWKPCLKSOURCE_HSE_DIV1024  HSE div1024 Clock selected as RFWKP clock
-  * @note      (*) Value not defined for all devices
-  *
   * @retval None
   */
 #define __HAL_RCC_RFWAKEUP_CONFIG(__RFWKP_CLKSOURCE__)  LL_RCC_SetRFWKPClockSource(__RFWKP_CLKSOURCE__)
@@ -1212,9 +1187,7 @@ typedef struct
   *         This parameter can be one of the following values:
   *            @arg @ref RCC_RFWKPCLKSOURCE_NONE         No clock selected as RFWKP clock
   *            @arg @ref RCC_RFWKPCLKSOURCE_LSE          LSE Clock selected as RFWKP clock
-  *            @arg @ref RCC_RFWKPCLKSOURCE_LSI          LSI Clock selected as RFWKP clock (*)
   *            @arg @ref RCC_RFWKPCLKSOURCE_HSE_DIV1024  HSE div1024 Clock selected as RFWKP clock
-  * @note      (*) Value not defined for all devices
   */
 #define __HAL_RCC_GET_RFWAKEUP_SOURCE()  LL_RCC_GetRFWKPClockSource()
 
@@ -1464,15 +1437,15 @@ typedef struct
   *              @arg @ref RCC_CRS_IT_SYNCMISS  SYNC missed interrupt
   */
 #define __HAL_RCC_CRS_CLEAR_IT(__INTERRUPT__)  do { \
-                                                    if(((__INTERRUPT__) & RCC_CRS_IT_ERROR_MASK) != RESET) \
-                                                    { \
-                                                      WRITE_REG(CRS->ICR, CRS_ICR_ERRC | ((__INTERRUPT__) & ~RCC_CRS_IT_ERROR_MASK)); \
-                                                    } \
-                                                    else \
-                                                    { \
-                                                      WRITE_REG(CRS->ICR, (__INTERRUPT__)); \
-                                                    } \
-                                                  } while(0)
+                                                 if(((__INTERRUPT__) & RCC_CRS_IT_ERROR_MASK) != RESET) \
+                                                 { \
+                                                   WRITE_REG(CRS->ICR, CRS_ICR_ERRC | ((__INTERRUPT__) & ~RCC_CRS_IT_ERROR_MASK)); \
+                                                 } \
+                                                 else \
+                                                 { \
+                                                   WRITE_REG(CRS->ICR, (__INTERRUPT__)); \
+                                                 } \
+                                               } while(0)
 
 /**
   * @brief  Check whether the specified CRS flag is set or not.
@@ -1504,15 +1477,15 @@ typedef struct
   * @retval None
   */
 #define __HAL_RCC_CRS_CLEAR_FLAG(__FLAG__)     do { \
-                                                    if(((__FLAG__) & RCC_CRS_FLAG_ERROR_MASK) != 0U) \
-                                                    { \
-                                                      WRITE_REG(CRS->ICR, CRS_ICR_ERRC | ((__FLAG__) & ~RCC_CRS_FLAG_ERROR_MASK)); \
-                                                    } \
-                                                    else \
-                                                    { \
-                                                      WRITE_REG(CRS->ICR, (__FLAG__)); \
-                                                    } \
-                                                  } while(0)
+                                                 if(((__FLAG__) & RCC_CRS_FLAG_ERROR_MASK) != 0U) \
+                                                 { \
+                                                   WRITE_REG(CRS->ICR, CRS_ICR_ERRC | ((__FLAG__) & ~RCC_CRS_FLAG_ERROR_MASK)); \
+                                                 } \
+                                                 else \
+                                                 { \
+                                                   WRITE_REG(CRS->ICR, (__FLAG__)); \
+                                                 } \
+                                               } while(0)
 #endif
 /**
   * @}
@@ -1537,14 +1510,14 @@ typedef struct
 #define __HAL_RCC_CRS_FREQ_ERROR_COUNTER_DISABLE() LL_CRS_DisableFreqErrorCounter()
 
 /**
-  * @brief  Enable the automatic hardware adjustment of TRIM bits.
+  * @brief  Enable the automatic hardware adjustement of TRIM bits.
   * @note   When the AUTOTRIMEN bit is set the CRS_CFGR register becomes write-protected.
   * @retval None
   */
 #define __HAL_RCC_CRS_AUTOMATIC_CALIB_ENABLE()     LL_CRS_EnableAutoTrimming()
 
 /**
-  * @brief  Enable or disable the automatic hardware adjustment of TRIM bits.
+  * @brief  Enable or disable the automatic hardware adjustement of TRIM bits.
   * @retval None
   */
 #define __HAL_RCC_CRS_AUTOMATIC_CALIB_DISABLE()    LL_CRS_DisableAutoTrimming()
@@ -1657,3 +1630,5 @@ void              HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
 #endif
 
 #endif /* STM32WBxx_HAL_RCC_EX_H */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

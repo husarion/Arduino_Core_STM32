@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2020, STMicroelectronics
+ * Copyright (c) 2020-{{year}}, STMicroelectronics
  * All rights reserved.
  *
  * This software component is licensed by ST under BSD 3-Clause license,
@@ -99,15 +99,6 @@
   #define PIN_SERIAL_TX         {{serial.tx}}
 #endif
 
-{% if alias_list %}
-// Alias
-  {% for alias in alias_list %}
-#ifndef {{alias[0]}}
-  #define {{"%-21s %s"|format(alias[0], alias[1])}}
-#endif
-  {% endfor %}
-
-{% endif %}
 {% if hal_modules_list %}
 // Extra HAL modules
   {% for hal_module in hal_modules_list %}

@@ -174,7 +174,7 @@ HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   maskline = (1uL << linepos);
 
   /* Configure triggers for configurable lines */
-  if ((pExtiConfig->Line & EXTI_CONFIG) != 0x0u)
+  if ((pExtiConfig->Line & EXTI_CONFIG) != 0x00u)
   {
     assert_param(IS_EXTI_TRIGGER(pExtiConfig->Trigger));
 
@@ -183,7 +183,7 @@ HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
     regval = *regaddr;
 
     /* Mask or set line */
-    if ((pExtiConfig->Trigger & EXTI_TRIGGER_RISING) != 0x0u)
+    if ((pExtiConfig->Trigger & EXTI_TRIGGER_RISING) != 0x00u)
     {
       regval |= maskline;
     }
@@ -200,7 +200,7 @@ HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
     regval = *regaddr;
 
     /* Mask or set line */
-    if ((pExtiConfig->Trigger & EXTI_TRIGGER_FALLING) != 0x0u)
+    if ((pExtiConfig->Trigger & EXTI_TRIGGER_FALLING) != 0x00u)
     {
       regval |= maskline;
     }
@@ -225,16 +225,15 @@ HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
     }
   }
 
-
   /*Set Interrupt And Event Mask for Core 1 if configuration for Core 1 given into parameter mode */
-  if ((pExtiConfig->Mode & EXTI_MODE_C1) != 0x0u)
+  if ((pExtiConfig->Mode & EXTI_MODE_C1) != 0x00u)
   {
     regaddr = (&EXTI->C1IMR1 + (EXTI_MODE_OFFSET * offset));
 
     regval = *regaddr;
 
     /* Mask or set line */
-    if ((pExtiConfig->Mode & EXTI_MODE_INTERRUPT) != 0x0u)
+    if ((pExtiConfig->Mode & EXTI_MODE_INTERRUPT) != 0x00u)
     {
       regval |= maskline;
     }
@@ -245,17 +244,18 @@ HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
 
     /* Store interrupt mode */
     *regaddr = regval;
+
   }
 
   /*Set Interrupt And Event Mask for Core 2 if configuration for Core 2 given into parameter mode  */
-  if ((pExtiConfig->Mode & EXTI_MODE_C2) != 0x0u)
+  if ((pExtiConfig->Mode & EXTI_MODE_C2) != 0x00u)
   {
     regaddr = (&EXTI->C2IMR1 + (EXTI_MODE_OFFSET * offset));
 
     regval = *regaddr;
 
     /* Mask or set line */
-    if ((pExtiConfig->Mode & EXTI_MODE_INTERRUPT) != 0x0u)
+    if ((pExtiConfig->Mode & EXTI_MODE_INTERRUPT) != 0x00u)
     {
       regval |= maskline;
     }
@@ -275,7 +275,7 @@ HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
     regval = *regaddr;
 
     /* Mask or set line */
-    if ((pExtiConfig->Mode & EXTI_MODE_EVENT) != 0x0u)
+    if ((pExtiConfig->Mode & EXTI_MODE_EVENT) != 0x00u)
     {
       regval |= maskline;
     }
@@ -323,13 +323,12 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   linepos = (pExtiConfig->Line & EXTI_PIN_MASK);
   maskline = (1uL << linepos);
 
-
   /* 1] Get core 1 mode : interrupt */
   regaddr = (&EXTI->C1IMR1 + (EXTI_MODE_OFFSET * offset));
   regval = *regaddr;
 
   /* Check if selected line is enable */
-  if ((regval & maskline) != 0x0u)
+  if ((regval & maskline) != 0x00u)
   {
     pExtiConfig->Mode = EXTI_MODE_C1_INTERRUPT;
   }
@@ -343,7 +342,7 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   regval = *regaddr;
 
   /* Check if selected line is enable */
-  if ((regval & maskline) != 0x0u)
+  if ((regval & maskline) != 0x00u)
   {
     pExtiConfig->Mode |= EXTI_MODE_C2_INTERRUPT;
   }
@@ -357,25 +356,25 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   regval = *regaddr;
 
   /* Check if selected line is enable */
-  if ((regval & maskline) != 0x0u)
+  if ((regval & maskline) != 0x00u)
   {
     pExtiConfig->Mode |= EXTI_MODE_C2_EVENT;
   }
 
-  /* Get default Trigger and GPIOSel configuration */
-  pExtiConfig->Trigger = EXTI_TRIGGER_NONE;
-  pExtiConfig->GPIOSel = 0x0u;
-
   /* 2] Get trigger for configurable lines : rising */
-  if ((pExtiConfig->Line & EXTI_CONFIG) != 0x0u)
+  if ((pExtiConfig->Line & EXTI_CONFIG) != 0x00u)
   {
     regaddr = (&EXTI->RTSR1 + (EXTI_CONFIG_OFFSET * offset));
     regval = *regaddr;
 
     /* Check if configuration of selected line is enable */
-    if ((regval & maskline) != 0x0u)
+    if ((regval & maskline) != 0x00u)
     {
       pExtiConfig->Trigger = EXTI_TRIGGER_RISING;
+    }
+    else
+    {
+      pExtiConfig->Trigger = EXTI_TRIGGER_NONE;
     }
 
     /* Get falling configuration */
@@ -383,7 +382,7 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
     regval = *regaddr;
 
     /* Check if configuration of selected line is enable */
-    if ((regval & maskline) != 0x0u)
+    if ((regval & maskline) != 0x00u)
     {
       pExtiConfig->Trigger |= EXTI_TRIGGER_FALLING;
     }
@@ -396,6 +395,15 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
       regval = EXTI->EXTICR[linepos >> 2u];
       pExtiConfig->GPIOSel = ((regval << (EXTI_EXTICR1_EXTI1_Pos * (3uL - (linepos & 0x03u)))) >> 24);
     }
+    else
+    {
+      pExtiConfig->GPIOSel = 0x00u;
+    }
+  }
+  else
+  {
+    pExtiConfig->Trigger = EXTI_TRIGGER_NONE;
+    pExtiConfig->GPIOSel = 0x00u;
   }
 
   return HAL_OK;
@@ -439,12 +447,13 @@ HAL_StatusTypeDef HAL_EXTI_ClearConfigLine(EXTI_HandleTypeDef *hexti)
   *regaddr = regval;
 
   /* 2] Clear event mode */
+
   regaddr = (&EXTI->C2EMR1 + (EXTI_MODE_OFFSET * offset));
   regval = (*regaddr & ~maskline);
   *regaddr = regval;
 
   /* 3] Clear triggers in case of configurable lines */
-  if ((hexti->Line & EXTI_CONFIG) != 0x0u)
+  if ((hexti->Line & EXTI_CONFIG) != 0x00u)
   {
     regaddr = (&EXTI->RTSR1 + (EXTI_CONFIG_OFFSET * offset));
     regval = (*regaddr & ~maskline);
@@ -568,7 +577,7 @@ void HAL_EXTI_IRQHandler(EXTI_HandleTypeDef *hexti)
   regaddr = (&EXTI->RPR1 + (EXTI_CONFIG_OFFSET * offset));
   regval = (*regaddr & maskline);
 
-  if (regval != 0x0u)
+  if (regval != 0x00u)
   {
     /* Clear pending bit */
     *regaddr = maskline;
@@ -584,7 +593,7 @@ void HAL_EXTI_IRQHandler(EXTI_HandleTypeDef *hexti)
   regaddr = (&EXTI->FPR1 + (EXTI_CONFIG_OFFSET * offset));
   regval = (*regaddr & maskline);
 
-  if (regval != 0x0u)
+  if (regval != 0x00u)
   {
     /* Clear pending bit */
     *regaddr = maskline;

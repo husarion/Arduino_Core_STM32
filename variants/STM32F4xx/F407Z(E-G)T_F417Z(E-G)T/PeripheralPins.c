@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2020, STMicroelectronics
+ * Copyright (c) 2020-2021, STMicroelectronics
  * All rights reserved.
  *
  * This software component is licensed by ST under BSD 3-Clause license,
@@ -12,11 +12,12 @@
  */
 /*
  * Automatically generated from STM32F407Z(E-G)Tx.xml, STM32F417Z(E-G)Tx.xml
- * CubeMX DB release 6.0.70
+ * CubeMX DB release 6.0.30
  */
 #if !defined(CUSTOM_PERIPHERAL_PINS)
 #include "Arduino.h"
 #include "PeripheralPins.h"
+
 
 /* =====
  * Notes:
@@ -315,7 +316,7 @@ WEAK const PinMap PinMap_SPI_SSEL[] = {
 
 //*** CAN ***
 
-#if defined(HAL_CAN_MODULE_ENABLED) || defined(HAL_CAN_LEGACY_MODULE_ENABLED)
+#ifdef HAL_CAN_MODULE_ENABLED
 WEAK const PinMap PinMap_CAN_RD[] = {
   {PA_11, CAN1, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF9_CAN1)},
   {PB_5,  CAN2, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF9_CAN2)},
@@ -326,7 +327,7 @@ WEAK const PinMap PinMap_CAN_RD[] = {
 };
 #endif
 
-#if defined(HAL_CAN_MODULE_ENABLED) || defined(HAL_CAN_LEGACY_MODULE_ENABLED)
+#ifdef HAL_CAN_MODULE_ENABLED
 WEAK const PinMap PinMap_CAN_TD[] = {
   {PA_12, CAN1, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF9_CAN1)},
   {PB_6,  CAN2, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF9_CAN2)},
@@ -339,8 +340,8 @@ WEAK const PinMap PinMap_CAN_TD[] = {
 
 //*** ETHERNET ***
 
-#if defined(HAL_ETH_MODULE_ENABLED) || defined(HAL_ETH_LEGACY_MODULE_ENABLED)
-WEAK const PinMap PinMap_Ethernet[] = {
+#ifdef HAL_ETH_MODULE_ENABLED
+WEAK const PinMap PinMap_Ethernet_MII[] = {
   {PA_0,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_CRS
   {PA_1,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_REF_CLK
   {PA_1_ALT1, ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_RX_CLK
@@ -366,6 +367,19 @@ WEAK const PinMap PinMap_Ethernet[] = {
   {PG_11,     ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_TX_EN
   {PG_13,     ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_TXD0
   {PG_14,     ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_TXD1
+  {NC,        NP,  0}
+};
+
+WEAK const PinMap PinMap_Ethernet_RMII[] = {
+  {PA_1,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_REF_CLK
+  {PA_2,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_MDIO
+  {PA_7,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_CRS_DV
+  {PB_11,     ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_TX_EN
+  {PB_12,     ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_TXD0
+  {PB_13,     ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_TXD1
+  {PC_1,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_MDC
+  {PC_4,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_RXD0
+  {PC_5,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_RXD1
   {NC,        NP,  0}
 };
 #endif

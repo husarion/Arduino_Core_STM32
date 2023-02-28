@@ -6,12 +6,14 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
+  *
   ******************************************************************************
   */
 
@@ -747,10 +749,10 @@ typedef struct
   * @retval The new state of FLASH_FLAG (SET or RESET).
   */
 #define __HAL_FLASH_GET_FLAG(__FLAG__)          ((((__FLAG__) & FLASH_FLAG_ECCR_ERRORS) != 0U) ? \
-                                                 (READ_BIT(FLASH->ECCR, (__FLAG__)) != 0U) : \
+                                                 (READ_BIT(FLASH->ECCR, (__FLAG__)) == (__FLAG__)) : \
                                                  ((((__FLAG__) & (FLASH_FLAG_OPTWERR)) != 0U) ? \
-                                                  (READ_BIT(FLASH->NSSR, (__FLAG__)) != 0U) : \
-                                                  (READ_BIT(FLASH->SECSR, (__FLAG__)) != 0U)))
+                                                  (READ_BIT(FLASH->NSSR, (__FLAG__)) == (__FLAG__)) : \
+                                                  (READ_BIT(FLASH->SECSR, (__FLAG__)) == (__FLAG__))))
 /**
   * @brief  Check whether the specified non-secure FLASH flags from the secure world is set or not.
   * @param  __FLAG__ specifies the FLASH flag to check.
@@ -769,8 +771,8 @@ typedef struct
   * @retval The new state of FLASH_FLAG (SET or RESET).
   */
 #define __HAL_FLASH_GET_FLAG_NS(__FLAG__)       ((((__FLAG__) & FLASH_FLAG_ECCR_ERRORS) != 0U) ? \
-                                                 (READ_BIT(FLASH->ECCR, (__FLAG__)) != 0U) : \
-                                                 (READ_BIT(FLASH->NSSR, (__FLAG__)) != 0U))
+                                                 (READ_BIT(FLASH->ECCR, (__FLAG__)) == (__FLAG__)) : \
+                                                 (READ_BIT(FLASH->NSSR, (__FLAG__)) == (__FLAG__)))
 #else
 /**
   * @brief  Check whether the specified non-secure FLASH flags from the non-secure world is set or not.
@@ -790,8 +792,8 @@ typedef struct
   * @retval The new state of FLASH_FLAG (SET or RESET).
   */
 #define __HAL_FLASH_GET_FLAG(__FLAG__)          ((((__FLAG__) & FLASH_FLAG_ECCR_ERRORS) != 0U) ? \
-                                                 (READ_BIT(FLASH->ECCR, (__FLAG__)) != 0U) : \
-                                                 (READ_BIT(FLASH->NSSR, (__FLAG__)) != 0U))
+                                                 (READ_BIT(FLASH->ECCR, (__FLAG__)) == (__FLAG__)) : \
+                                                 (READ_BIT(FLASH->NSSR, (__FLAG__)) == (__FLAG__)))
 #endif /* __ARM_FEATURE_CMSE */
 
 #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
@@ -1095,3 +1097,4 @@ HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout);
 
 #endif /* STM32L5xx_HAL_FLASH_H */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

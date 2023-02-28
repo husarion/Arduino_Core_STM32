@@ -109,10 +109,6 @@ To increase the performance of SerialVirtIO you can resize the related buffer co
 
 The recommended option is to resize `VRING_NUM_BUFFS`. Be very cautious when resizing `RPMSG_BUFFER_SIZE`, which must be matched with the Linux kernel definition. Also `VIRTIO_BUFFER_SIZE` has the minimum required size depending on the other two. See their links above for further descriptions.
 
-#### Note
-
-* Since openSTLinux distribution 4.0 with Linux 5.15, `RPMSG_SERVICE_NAME` has been renamed from `rpmsg-tty-channel` to `rpmsg-tty`, if older distribution is used, it is required to redefine it to  `rpmsg-tty-channel`
-
 To redefine these definitions, see how to create `build_opt.h` described in Debugging section below.
 
 ### Virtual Serial Example
@@ -161,18 +157,17 @@ After loading Arduino, You can use SerialVirtIO in two ways in this example:
 
 For printf-style debugging, `core_debug()` is highly recommended instead of using Arduino Serial. In STM32MP1, `core_debug()` utilizes OpenAMP trace buffer and it has a minimal real-time impact (other than the overhead of printf) because it is not bound to the speed of a hardware IO peripheral while printing it.
 
-Select `Core logs Enabled` in `Tools->Debug symbols and core logs`.
-Additionally you can resize the buffer size of logging by redefining `VIRTIO_LOG_BUFFER_SIZE` (2kb by default).
-Create [build_opt.h] in the sketch directory and simply put `-DVIRTIO_LOG_BUFFER_SIZE=xxxx`. As an example you can create a file like the following:
+Create [build_opt.h] in the sketch directory and simply put `-DCORE_DEBUG`. Additionally you can resize the buffer size of logging by redefining `VIRTIO_LOG_BUFFER_SIZE` (2kb by default). As an example you can create a file like the following:
 
 ```
 build_opt.h (in the same directory of your Sketch)
 -----------------------------
 
+-DCORE_DEBUG
 -DVIRTIO_LOG_BUFFER_SIZE=4086
 ```
 
-Don't forget to add `#include "core_debug.h"` in your code in order to use `core_debug()`.
+Don't forget to change any of Arduino IDE option to reflect this as in the warning section in [build_opt.h description in wiki]. This is important because if `-DCORE_DEBUG` is not configured correctly `core_debug()` silently becomes an empty function without triggering any build error. Don't forget to add `#include "core_debug.h"` in your code in order to use `core_debug()`.
 
 Also, you must enable the Virtual Serial (described in the above section) and include `SerialVirtIO.begin();` in your Arduino sketch, because this logging feature is tightly coupled to OpenAMP virtio.
 
@@ -206,7 +201,7 @@ void loop() {
 }
 ```
 
-Don't forget to select `Core logs Enabled` in `Tools->Debug symbols and core logs` as described above.
+Don't forget to add [build_opt.h] described above.
 
 After loading Arduino, you can simply `sh run_arduino_<sketch name>.sh log` to print the current `core_debug()` logs.
 

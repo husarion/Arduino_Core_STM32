@@ -50,14 +50,11 @@ extern "C" {
 #define HAL_DCMI_MODULE_ENABLED
 #define HAL_DMA_MODULE_ENABLED
 #define HAL_DMA2D_MODULE_ENABLED
-#define HAL_DSI_MODULE_ENABLED
 #define HAL_EXTI_MODULE_ENABLED
 #define HAL_FDCAN_MODULE_ENABLED
 #define HAL_FLASH_MODULE_ENABLED
 #define HAL_FMAC_MODULE_ENABLED
-#define HAL_GFXMMU_MODULE_ENABLED
 #define HAL_GPIO_MODULE_ENABLED
-#define HAL_GPU2D_MODULE_ENABLED
 #define HAL_GTZC_MODULE_ENABLED
 #define HAL_HASH_MODULE_ENABLED
 #define HAL_HCD_MODULE_ENABLED
@@ -66,7 +63,6 @@ extern "C" {
 #define HAL_IRDA_MODULE_ENABLED
 #define HAL_IWDG_MODULE_ENABLED
 #define HAL_LPTIM_MODULE_ENABLED
-#define HAL_LTDC_MODULE_ENABLED
 #define HAL_MDF_MODULE_ENABLED
 #define HAL_MMC_MODULE_ENABLED
 #define HAL_NAND_MODULE_ENABLED
@@ -93,7 +89,6 @@ extern "C" {
 #define HAL_UART_MODULE_ENABLED
 #define HAL_USART_MODULE_ENABLED
 #define HAL_WWDG_MODULE_ENABLED
-#define HAL_XSPI_MODULE_ENABLED
 #endif
 
 /* ########################## Oscillator Values adaptation ####################*/
@@ -208,12 +203,9 @@ vary depending on the variations in voltage and temperature.*/
 #define  USE_HAL_DAC_REGISTER_CALLBACKS        0U /* DAC register callback disabled       */
 #define  USE_HAL_DCMI_REGISTER_CALLBACKS       0U /* DCMI register callback disabled      */
 #define  USE_HAL_DMA2D_REGISTER_CALLBACKS      0U /* DMA2D register callback disabled     */
-#define  USE_HAL_DSI_REGISTER_CALLBACKS        0U /* DSI register callback disabled       */
 #define  USE_HAL_ETH_REGISTER_CALLBACKS        0U /* ETH register callback disabled       */
 #define  USE_HAL_FDCAN_REGISTER_CALLBACKS      0U /* FDCAN register callback disabled     */
 #define  USE_HAL_FMAC_REGISTER_CALLBACKS       0U /* FMAC register callback disabled      */
-#define  USE_HAL_GFXMMU_REGISTER_CALLBACKS     0U /* GFXMMU register callback disabled    */
-#define  USE_HAL_GPU2D_REGISTER_CALLBACKS      0U /* GPU2D register callback disabled     */
 #define  USE_HAL_HASH_REGISTER_CALLBACKS       0U /* HASH register callback disabled      */
 #define  USE_HAL_HCD_REGISTER_CALLBACKS        0U /* HCD register callback disabled       */
 #define  USE_HAL_I2C_REGISTER_CALLBACKS        0U /* I2C register callback disabled       */
@@ -244,7 +236,6 @@ vary depending on the variations in voltage and temperature.*/
 #define  USE_HAL_UART_REGISTER_CALLBACKS       0U /* UART register callback disabled      */
 #define  USE_HAL_USART_REGISTER_CALLBACKS      0U /* USART register callback disabled     */
 #define  USE_HAL_WWDG_REGISTER_CALLBACKS       0U /* WWDG register callback disabled      */
-#define  USE_HAL_XSPI_REGISTER_CALLBACKS       0U /* XSPI register callback disabled      */
 
 /* ################## SPI peripheral configuration ########################## */
 
@@ -252,14 +243,12 @@ vary depending on the variations in voltage and temperature.*/
  * Activated: CRC code is present inside driver
  * Deactivated: CRC code cleaned from driver
  */
-#if !defined (USE_SPI_CRC)
 #define USE_SPI_CRC                   1U
-#endif
 
 /* ################## SDMMC peripheral configuration ######################### */
-#if !defined (USE_SD_TRANSCEIVER)
+
 #define USE_SD_TRANSCEIVER            0U
-#endif
+
 
 /* Includes ------------------------------------------------------------------*/
 /**
@@ -294,10 +283,6 @@ vary depending on the variations in voltage and temperature.*/
 #include "stm32u5xx_hal_dma2d.h"
 #endif /* HAL_DMA2D_MODULE_ENABLED */
 
-#ifdef HAL_DSI_MODULE_ENABLED
-#include "stm32u5xx_hal_dsi.h"
-#endif /* HAL_DSI_MODULE_ENABLED */
-
 #ifdef HAL_CORTEX_MODULE_ENABLED
 #include "stm32u5xx_hal_cortex.h"
 #endif /* HAL_CORTEX_MODULE_ENABLED */
@@ -330,10 +315,6 @@ vary depending on the variations in voltage and temperature.*/
 #include "stm32u5xx_hal_flash.h"
 #endif /* HAL_FLASH_MODULE_ENABLED */
 
-#ifdef HAL_GFXMMU_MODULE_ENABLED
-#include "stm32u5xx_hal_gfxmmu.h"
-#endif /* HAL_GFXMMU_MODULE_ENABLED */
-
 #ifdef HAL_HASH_MODULE_ENABLED
 #include "stm32u5xx_hal_hash.h"
 #endif /* HAL_HASH_MODULE_ENABLED */
@@ -365,10 +346,6 @@ vary depending on the variations in voltage and temperature.*/
 #ifdef HAL_LPTIM_MODULE_ENABLED
 #include "stm32u5xx_hal_lptim.h"
 #endif /* HAL_LPTIM_MODULE_ENABLED */
-
-#ifdef HAL_LTDC_MODULE_ENABLED
-#include "stm32u5xx_hal_ltdc.h"
-#endif /* HAL_LTDC_MODULE_ENABLED */
 
 #ifdef HAL_OPAMP_MODULE_ENABLED
 #include "stm32u5xx_hal_opamp.h"
@@ -477,14 +454,6 @@ vary depending on the variations in voltage and temperature.*/
 #ifdef HAL_MDF_MODULE_ENABLED
 #include "stm32u5xx_hal_mdf.h"
 #endif /* HAL_MDF_MODULE_ENABLED */
-
-#ifdef HAL_GPU2D_MODULE_ENABLED
-#include "stm32u5xx_hal_gpu2d.h"
-#endif /* HAL_GPU2D_MODULE_ENABLED */
-
-#ifdef HAL_XSPI_MODULE_ENABLED
-#include "stm32u5xx_hal_xspi.h"
-#endif /* HAL_XSPI_MODULE_ENABLED */
 
 /* Exported macro ------------------------------------------------------------*/
 #ifdef  USE_FULL_ASSERT

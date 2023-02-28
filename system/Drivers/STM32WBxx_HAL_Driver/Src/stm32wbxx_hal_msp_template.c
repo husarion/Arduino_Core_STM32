@@ -4,19 +4,20 @@
   * @author  MCD Application Team
   * @brief   This file contains the HAL System and Peripheral (PPP) MSP initialization
   *          and de-initialization functions.
-  *          It should be copied to the application folder and renamed into 'stm32wbxx_hal_msp.c'.
+  *          It should be copied to the application folder and renamed into 'stm32wbxx_hal_msp.c'.           
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the 
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
-  */
+  */ 
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32wbxx_hal.h"
@@ -65,7 +66,7 @@ void HAL_MspDeInit(void)
 
 /**
   * @brief  Initializes the PPP MSP.
-  * @note   This functiona is called from HAL_PPP_Init() function to perform
+  * @note   This functiona is called from HAL_PPP_Init() function to perform 
   *         peripheral(PPP) system level initialization (GPIOs, clock, DMA, interrupt)
   * @retval None
   */
@@ -76,7 +77,7 @@ void HAL_PPP_MspInit(void)
 
 /**
   * @brief  DeInitializes the PPP MSP.
-  * @note   This functiona is called from HAL_PPP_DeInit() function to perform
+  * @note   This functiona is called from HAL_PPP_DeInit() function to perform 
   *         peripheral(PPP) system level de-initialization (GPIOs, clock, DMA, interrupt)
   * @retval None
   */
@@ -96,3 +97,5 @@ void HAL_PPP_MspDeInit(void)
 /**
   * @}
   */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

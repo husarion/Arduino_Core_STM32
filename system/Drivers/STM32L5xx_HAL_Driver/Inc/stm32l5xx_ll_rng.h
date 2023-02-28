@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -38,15 +39,6 @@ extern "C" {
   */
 
 /* Private types -------------------------------------------------------------*/
-/* Private defines -----------------------------------------------------------*/
-/** @defgroup RNG_LL_Private_Defines RNG Private Defines
-  * @{
-  */
-/*  Health test control register information to use in CCM algorithm */
-#define LL_RNG_HTCFG   0x17590ABCU /*!< Magic number */
-/**
-  * @}
-  */
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
@@ -632,9 +624,6 @@ __STATIC_INLINE uint32_t LL_RNG_ReadRandData32(RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_SetHealthConfig(RNG_TypeDef *RNGx, uint32_t HTCFG)
 {
-  /*!< magic number must be written immediately before to RNG_HTCRG */
-  WRITE_REG(RNGx->HTCR, LL_RNG_HTCFG);
-
   WRITE_REG(RNGx->HTCR, HTCFG);
 }
 
@@ -646,9 +635,6 @@ __STATIC_INLINE void LL_RNG_SetHealthConfig(RNG_TypeDef *RNGx, uint32_t HTCFG)
   */
 __STATIC_INLINE uint32_t LL_RNG_GetHealthConfig(RNG_TypeDef *RNGx)
 {
-  /*!< magic number must be written immediately before reading RNG_HTCRG */
-  WRITE_REG(RNGx->HTCR, LL_RNG_HTCFG);
-
   return (uint32_t)READ_REG(RNGx->HTCR);
 }
 
@@ -689,3 +675,4 @@ ErrorStatus LL_RNG_DeInit(RNG_TypeDef *RNGx);
 
 #endif /* __STM32L5xx_LL_RNG_H */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

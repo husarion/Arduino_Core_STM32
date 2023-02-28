@@ -191,9 +191,7 @@
 /* SD detect signal */
 #define SD_DETECT_PIN           PB12
 /* SD Transceiver */
-/* SD_TRANSCEIVER_MODE is deprecated */
 #define SD_TRANSCEIVER_MODE     SD_TRANSCEIVER_ENABLE
-#define USE_SD_TRANSCEIVER      1U
 #define SD_TRANSCEIVER_EN       PE4
 #define SD_TRANSCEIVER_SEL      PE5
 

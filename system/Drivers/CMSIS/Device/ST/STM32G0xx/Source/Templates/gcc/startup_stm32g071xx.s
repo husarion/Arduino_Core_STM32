@@ -293,3 +293,6 @@ g_pfnVectors:
 
   .weak      CEC_IRQHandler
   .thumb_set CEC_IRQHandler,Default_Handler
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

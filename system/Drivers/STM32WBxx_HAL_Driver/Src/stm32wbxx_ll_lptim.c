@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -27,7 +28,7 @@
 #include "stm32_assert.h"
 #else
 #define assert_param(expr) ((void)0U)
-#endif /* USE_FULL_ASSERT */
+#endif
 
 /** @addtogroup STM32WBxx_LL_Driver
   * @{
@@ -144,7 +145,7 @@ void LL_LPTIM_StructInit(LL_LPTIM_InitTypeDef *LPTIM_InitStruct)
   *          - SUCCESS: LPTIMx instance has been initialized
   *          - ERROR: LPTIMx instance hasn't been initialized
   */
-ErrorStatus LL_LPTIM_Init(LPTIM_TypeDef *LPTIMx, const LL_LPTIM_InitTypeDef *LPTIM_InitStruct)
+ErrorStatus LL_LPTIM_Init(LPTIM_TypeDef *LPTIMx, LL_LPTIM_InitTypeDef *LPTIM_InitStruct)
 {
   ErrorStatus result = SUCCESS;
   /* Check the parameters */
@@ -195,7 +196,6 @@ void LL_LPTIM_Disable(LPTIM_TypeDef *LPTIMx)
   uint32_t tmpCFGR;
   uint32_t tmpCMP;
   uint32_t tmpARR;
-  uint32_t primask_bit;
 #if defined(LPTIM_OR_OR)
   uint32_t tmpOR;
 #endif
@@ -203,9 +203,7 @@ void LL_LPTIM_Disable(LPTIM_TypeDef *LPTIMx)
   /* Check the parameters */
   assert_param(IS_LPTIM_INSTANCE(LPTIMx));
 
-  /* Enter critical section */
-  primask_bit = __get_PRIMASK();
-  __set_PRIMASK(1) ;
+  __disable_irq();
 
   /********** Save LPTIM Config *********/
   /* Save LPTIM source clock */
@@ -280,7 +278,8 @@ void LL_LPTIM_Disable(LPTIM_TypeDef *LPTIMx)
       do
       {
         rcc_clock.SYSCLK_Frequency--; /* Used for timeout */
-      } while (((LL_LPTIM_IsActiveFlag_ARROK(LPTIMx) != 1UL)) && ((rcc_clock.SYSCLK_Frequency) > 0UL));
+      }
+      while (((LL_LPTIM_IsActiveFlag_ARROK(LPTIMx) != 1UL)) && ((rcc_clock.SYSCLK_Frequency) > 0UL));
 
       LL_LPTIM_ClearFlag_ARROK(LPTIMx);
     }
@@ -298,8 +297,7 @@ void LL_LPTIM_Disable(LPTIM_TypeDef *LPTIMx)
   LPTIMx->OR = tmpOR;
 #endif
 
-  /* Exit critical section: restore previous priority mask */
-  __set_PRIMASK(primask_bit);
+  __enable_irq();
 }
 
 /**
@@ -321,3 +319,5 @@ void LL_LPTIM_Disable(LPTIM_TypeDef *LPTIMx)
   */
 
 #endif /* USE_FULL_LL_DRIVER */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

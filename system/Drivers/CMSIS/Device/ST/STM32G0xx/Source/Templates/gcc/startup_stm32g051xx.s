@@ -286,3 +286,5 @@ g_pfnVectors:
 
   .weak      LPUART1_IRQHandler
   .thumb_set LPUART1_IRQHandler,Default_Handler
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

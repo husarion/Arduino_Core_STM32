@@ -15,7 +15,6 @@ from xml.dom.minidom import parse
 script_path = Path(__file__).parent.resolve()
 sys.path.append(str(script_path.parent))
 from utils import copyFile, copyFolder, createFolder, deleteFolder, genSTM32List
-from utils import execute_cmd, getRepoBranchName
 
 if sys.platform.startswith("win32"):
     from colorama import init
@@ -28,10 +27,8 @@ path_config_filename = "update_config.json"
 # GitHub
 gh_st = "https://github.com/STMicroelectronics/"
 gh_core = "https://github.com/stm32duino/Arduino_Core_STM32.git"
-gh_ble = "https://github.com/stm32duino/STM32duinoBLE.git"
 repo_generic_name = "STM32Cube"
 repo_core_name = "Arduino_Core_STM32"
-repo_ble_name = "STM32duinoBLE"
 repo_local_path = home / "STM32Cube_repo"
 local_cube_path = Path("")
 
@@ -73,6 +70,16 @@ out_format_Header = "| {:^22} | {:^31} | {:^31} |"
 out_subheader = "| {:^4} | {:^7} | {:^8} | {:^8} | {:^1} | {:^8} | {:^8} | {:^1} |"
 out_format = "| {:^12} | {:^7} | {:^8} | {:^8} | {:^1} | {:^8} | {:^8} | {:^1} |"
 out_separator = "-" * 70
+
+
+def execute_cmd(cmd, stderror):
+    try:
+        output = subprocess.check_output(cmd, stderr=stderror).decode("utf-8").strip()
+    except subprocess.CalledProcessError as e:
+        print("Failed command: ")
+        print(e.cmd)
+        exit(e.returncode)
+    return output
 
 
 def create_config(config_file_path):
@@ -229,6 +236,22 @@ def createSystemFiles(serie):
     copyFile(hal_conf_file, hal_conf_default)
 
 
+def getRepoBranchName(repo_path):
+    bname = ""
+    rname = ""
+    cmd = ["git", "-C", repo_path, "branch", "-r"]
+    bnames = execute_cmd(cmd, None).split("\n")
+    for b in bnames:
+        name_match = re.match(r"\S+/\S+ -> (\S+)/(\S+)", b.strip())
+        if name_match:
+            rname = name_match.group(1)
+            bname = name_match.group(2)
+    if not bname:
+        print(f"Could not find branch name for {repo_path}!")
+        exit(1)
+    return (rname, bname)
+
+
 def updateCoreRepo():
     # Handle core repo
     repo_path = repo_local_path / repo_core_name
@@ -277,7 +300,7 @@ def checkSTLocal():
         print(f"Could not find: {package_file}!")
         exit(1)
     # Process Cube release
-    release_regex = r"FW.(.+).(\d+.\d+.\d+.*)$"
+    release_regex = r"FW.(.+).(\d+.\d+.\d+)$"
     release_match = re.match(release_regex, cube_release)
     if release_match:
         serie = release_match.group(1)
@@ -345,12 +368,10 @@ def parseVersion(path):
     main_found = False
     sub1_found = False
     sub2_found = False
-    rc_found = False
     if "HAL" in str(path):
         main_pattern = re.compile(r"HAL_VERSION_MAIN.*0x([\dA-Fa-f]+)")
         sub1_pattern = re.compile(r"HAL_VERSION_SUB1.*0x([\dA-Fa-f]+)")
         sub2_pattern = re.compile(r"HAL_VERSION_SUB2.*0x([\dA-Fa-f]+)")
-        rc_pattern = re.compile(r"HAL_VERSION_RC.*0x([\dA-Fa-f]+)")
     else:
         main_pattern = re.compile(
             r"(?:CMSIS|DEVICE|CMSIS_DEVICE)_VERSION_MAIN.*0x([\dA-Fa-f]+)"
@@ -360,9 +381,6 @@ def parseVersion(path):
         )
         sub2_pattern = re.compile(
             r"(?:CMSIS|DEVICE|CMSIS_DEVICE)_VERSION_SUB2.*0x([\dA-Fa-f]+)"
-        )
-        rc_pattern = re.compile(
-            r"(?:CMSIS|DEVICE|CMSIS_DEVICE)_VERSION_RC.*0x([\dA-Fa-f]+)"
         )
 
     for i, line in enumerate(open(path, encoding="utf8", errors="ignore")):
@@ -375,10 +393,7 @@ def parseVersion(path):
         for match in re.finditer(sub2_pattern, line):
             VERSION_SUB2 = int(match.group(1), 16)
             sub2_found = True
-        for match in re.finditer(rc_pattern, line):
-            VERSION_RC = int(match.group(1), 16)
-            rc_found = True
-        if main_found and sub1_found and sub2_found and rc_found:
+        if main_found and sub1_found and sub2_found:
             break
     else:
         print(f"Could not find the full version in {path}")
@@ -391,16 +406,7 @@ def parseVersion(path):
         if sub2_found:
             print(f"sub2 version found: {VERSION_SUB2}")
         VERSION_SUB2 = "FF"
-        if rc_found:
-            print(f"rc version found: {VERSION_RC}")
-        VERSION_RC = "FF"
-
-    ret = f"{VERSION_MAIN}.{VERSION_SUB1}.{VERSION_SUB2}"
-
-    if VERSION_RC != 0:
-        ret = f"{ret}RC{VERSION_RC}"
-
-    return ret
+    return f"{VERSION_MAIN}.{VERSION_SUB1}.{VERSION_SUB2}"
 
 
 def checkVersion(serie, repo_path):
@@ -501,7 +507,7 @@ def commitFiles(repo_path, commit_msg):
         ["git", "-C", repo_path, "status", "--untracked-files", "--short"], None
     )
     if not status:
-        return False
+        return
     # Staged all files: new, modified and deleted
     execute_cmd(["git", "-C", repo_path, "add", "--all"], subprocess.DEVNULL)
     # Commit all stage files with signoff and message
@@ -522,11 +528,10 @@ def commitFiles(repo_path, commit_msg):
         ["git", "-C", repo_path, "rebase", "--whitespace=fix", "HEAD~1"],
         subprocess.DEVNULL,
     )
-    return True
 
 
 # Apply all patches found for the dedicated serie
-def applyPatch(serie, HAL_updated, CMSIS_updated, openamp_updated, repo_path):
+def applyPatch(serie, HAL_updated, CMSIS_updated, repo_path):
     # First check if some patch need to be applied
     patch_path = script_path / "patch"
     patch_list = []
@@ -542,12 +547,6 @@ def applyPatch(serie, HAL_updated, CMSIS_updated, openamp_updated, repo_path):
             for file in CMSIS_patch_path.iterdir():
                 if file.name.endswith(".patch"):
                     patch_list.append(CMSIS_patch_path / file)
-    if CMSIS_updated:
-        openamp_patch_path = patch_path / "openamp"
-        if openamp_patch_path.is_dir():
-            for file in openamp_patch_path.iterdir():
-                if file.name.endswith(".patch"):
-                    patch_list.append(openamp_patch_path / file)
 
     if len(patch_list):
         patch_failed = []
@@ -612,158 +611,6 @@ def updateMDFile(md_file, serie, version):
             print(regexmd_up.sub(rf"\g<1>{version}", line), end="")
 
 
-def updateBleRepo():
-    # Handle BLE library repo
-    repo_path = repo_local_path / repo_ble_name
-    print(f"Updating {repo_ble_name}...")
-    if repo_path.exists():
-        rname, bname = getRepoBranchName(repo_path)
-        # Get new tags from the remote
-        git_cmds = [
-            ["git", "-C", repo_path, "fetch"],
-            [
-                "git",
-                "-C",
-                repo_path,
-                "checkout",
-                "-B",
-                bname,
-                f"{rname}/{bname}",
-            ],
-        ]
-    else:
-        # Clone it as it does not exists yet
-        git_cmds = [["git", "-C", repo_local_path, "clone", gh_ble]]
-    for cmd in git_cmds:
-        execute_cmd(cmd, None)
-
-
-ble_file_list = [
-    "Middlewares/ST/STM32_WPAN/ble/core/ble_bufsize.h",
-    "Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/hw.h",
-    "Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/shci/shci.c",
-    "Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/shci/shci.h",
-    "Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/mbox_def.h",
-    "Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/shci_tl.c",
-    "Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/shci_tl.h",
-    "Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/tl.h",
-    "Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/tl_mbox.c",
-    "Middlewares/ST/STM32_WPAN/stm32_wpan_common.h",
-    "Middlewares/ST/STM32_WPAN/utilities/stm_list.c",
-    "Middlewares/ST/STM32_WPAN/utilities/stm_list.h",
-    "Middlewares/ST/STM32_WPAN/LICENSE.md",
-    "Projects/P-NUCLEO-WB55.Nucleo/Applications/BLE/BLE_TransparentMode/Core/Inc/app_conf.h",
-    "Projects/P-NUCLEO-WB55.Nucleo/Applications/BLE/BLE_TransparentMode/STM32_WPAN/Target/"
-    + "hw_ipcc.c",
-]
-
-
-def applyBlePatch():
-    print(" Applying patches to ble library")
-    BLE_patch_path = repo_local_path / repo_ble_name / "extras" / "STM32Cube_FW"
-    patch_list = []
-
-    if BLE_patch_path.is_dir():
-        for file in sorted(BLE_patch_path.iterdir()):
-            if file.name.endswith(".patch"):
-                patch_list.append(BLE_patch_path / file)
-
-    if len(patch_list):
-        patch_failed = []
-        print(
-            f" Apply {len(patch_list)} patch{'' if len(patch_list) == 1 else 'es'} for BLE library"
-        )
-        for patch in patch_list:
-            try:
-                # Test the patch before apply it
-                status = execute_cmd(
-                    [
-                        "git",
-                        "-C",
-                        repo_local_path / repo_ble_name,
-                        "apply",
-                        "--check",
-                        patch,
-                    ],
-                    subprocess.STDOUT,
-                )
-                if status:
-                    print(f"patch {patch} can't be applied")
-                    patch_failed.append([patch, status])
-                    continue
-
-                # Apply the patch
-                status = execute_cmd(
-                    [
-                        "git",
-                        "-C",
-                        repo_local_path / repo_ble_name,
-                        "am",
-                        "--keep-non-patch",
-                        "--quiet",
-                        "--signoff",
-                        patch,
-                    ],
-                    None,
-                )
-            except subprocess.CalledProcessError as e:
-                patch_failed.append([patch, e.cmd, e.output.decode("utf-8")])
-                # print(f"Failed command: {e.cmd}")
-        if len(patch_failed):
-            for fp in patch_failed:
-                e_out = "" if len(fp) == 2 else f"\n--> {fp[2]}"
-                print(f"Failed to apply {fp[0]}:\n{fp[1]}{e_out}")
-
-
-def updateBleReadme(filepath, version):
-    print(" Updating README.md in ble library")
-    for line in fileinput.input(filepath, inplace=True):
-        print(re.sub(r"v\d+.\d+.\d+", f"v{version}", line), end="")
-
-
-def updateBleLibrary():
-    if upargs.local:
-        cube_path = local_cube_path
-    else:
-        cube_name = f"{repo_generic_name}WB"
-        cube_path = repo_local_path / cube_name
-    ble_path = repo_local_path / repo_ble_name / "src" / "utility" / "STM32Cube_FW"
-    cube_version = cube_versions["WB"]
-
-    ble_commit_msg = f"chore: update STM32Cube_FW from Cube version {cube_version}"
-
-    for file in ble_file_list:
-        file_path = Path(cube_path / file)
-        file_name = file_path.name
-        if file_path.exists:
-            # copy each file to destination
-            if not Path(ble_path / file_name).parent.exists():
-                Path(ble_path / file_name).parent.mkdir(parents=True)
-            if file_name == "app_conf.h":
-                # rename app_conf.h to app_conf_default.h
-                copyFile(file_path, ble_path / "app_conf_default.h")
-            else:
-                copyFile(file_path, ble_path / file_name)
-        else:
-            print(f"File : {file_path} not found")
-            print("Abort")
-            sys.exit()
-
-    updateBleReadme(ble_path / "README.md", cube_version)
-
-    # Commit all BLE files
-    commitFiles(ble_path, ble_commit_msg)
-
-    # Apply BLE Arduino specific patch
-    applyBlePatch()
-
-
-def updateBle():
-    print("Updating WB BLE library")
-    updateBleRepo()
-    updateBleLibrary()
-
-
 def updateOpenAmp():
     print("Updating OpenAmp Middleware")
     repo_path = repo_local_path / repo_core_name
@@ -797,7 +644,6 @@ def updateCore():
         cube_version = cube_versions[serie]
         HAL_updated = False
         CMSIS_updated = False
-        openamp_updated = False
         hal_commit_msg = """system({0}) {3} STM32{0}xx HAL Drivers to v{1}
 
 Included in STM32Cube{0} FW {2}""".format(
@@ -831,7 +677,8 @@ Included in STM32Cube{0} FW {2}""".format(
             # Update MD file
             updateMDFile(md_HAL_path, serie, cube_HAL_ver)
             # Commit all HAL files
-            HAL_updated = commitFiles(core_path, hal_commit_msg)
+            commitFiles(core_path, hal_commit_msg)
+            HAL_updated = True
 
         if version.parse(core_CMSIS_ver) < version.parse(cube_CMSIS_ver):
             if upargs.add:
@@ -849,7 +696,8 @@ Included in STM32Cube{0} FW {2}""".format(
             # Update MD file
             updateMDFile(md_CMSIS_path, serie, cube_CMSIS_ver)
             # Commit all CMSIS files
-            CMSIS_updated = commitFiles(core_path, cmsis_commit_msg)
+            commitFiles(core_path, cmsis_commit_msg)
+            CMSIS_updated = True
 
         if upargs.add:
             system_commit_msg = (
@@ -873,13 +721,23 @@ Included in STM32Cube{0} FW {2}""".format(
             updateStm32Def(serie)
             commitFiles(core_path, update_stm32_def_commit_msg)
 
+        if HAL_updated or CMSIS_updated:
+            # Generate all wrapper files
+            # Assuming the ArduinoModule-CMSIS repo available
+            # at the same root level than the core
+            print(f"{'Adding' if upargs.add else 'Updating'} {serie} wrapped files...")
+            if stm32wrapper.wrap(core_path, None, False) == 0:
+                commitFiles(core_path, wrapper_commit_msg)
+            # Apply all related patch if any
+            applyPatch(serie, HAL_updated, CMSIS_updated, core_path)
+
         if serie == "MP1":
             print(f"Updating {serie} OpenAmp Middleware to Cube {cube_version} ...")
             updateOpenAmp()
             openAmp_commit_msg = (
-                f"system(openamp): update middleware to MP1 Cube version {cube_version}"
+                f"Update OpenAmp Middleware to MP1 Cube version {cube_version}"
             )
-            openamp_updated = commitFiles(core_path, openAmp_commit_msg)
+            commitFiles(core_path, openAmp_commit_msg)
             print(
                 "WARNING: OpenAmp MW has been updated, please check whether Arduino implementation:"
             )
@@ -894,19 +752,6 @@ Included in STM32Cube{0} FW {2}""".format(
             print(
                 "          --> Projects/STM32MP157C-DK2/Applications/OpenAMP/OpenAMP_TTY_echo"
             )
-
-        if serie == "WB":
-            updateBle()
-
-        if HAL_updated or CMSIS_updated or openamp_updated:
-            # Generate all wrapper files
-            # Assuming the ArduinoModule-CMSIS repo available
-            # at the same root level than the core
-            print(f"{'Adding' if upargs.add else 'Updating'} {serie} wrapped files...")
-            if stm32wrapper.wrap(core_path, None, False) == 0:
-                commitFiles(core_path, wrapper_commit_msg)
-            # Apply all related patch if any
-            applyPatch(serie, HAL_updated, CMSIS_updated, openamp_updated, core_path)
 
 
 # Parser

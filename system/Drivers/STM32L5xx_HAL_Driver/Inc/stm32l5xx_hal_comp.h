@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -99,7 +100,7 @@ typedef enum
 typedef struct __COMP_HandleTypeDef
 #else
 typedef struct
-#endif /* USE_HAL_COMP_REGISTER_CALLBACKS */
+#endif
 {
   COMP_TypeDef       *Instance;       /*!< Register base address    */
   COMP_InitTypeDef   Init;            /*!< COMP required parameters */
@@ -288,7 +289,7 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
                                                     } while(0)
 #else
 #define __HAL_COMP_RESET_HANDLE_STATE(__HANDLE__) ((__HANDLE__)->State = HAL_COMP_STATE_RESET)
-#endif /* USE_HAL_COMP_REGISTER_CALLBACKS */
+#endif
 
 /**
   * @brief Clear COMP error code (set it to no error code "HAL_COMP_ERROR_NONE").
@@ -712,7 +713,7 @@ void              HAL_COMP_IRQHandler(COMP_HandleTypeDef *hcomp);
   * @{
   */
 HAL_StatusTypeDef HAL_COMP_Lock(COMP_HandleTypeDef *hcomp);
-uint32_t          HAL_COMP_GetOutputLevel(const COMP_HandleTypeDef *hcomp);
+uint32_t          HAL_COMP_GetOutputLevel(COMP_HandleTypeDef *hcomp);
 /* Callback in interrupt mode */
 void              HAL_COMP_TriggerCallback(COMP_HandleTypeDef *hcomp);
 /**
@@ -723,8 +724,8 @@ void              HAL_COMP_TriggerCallback(COMP_HandleTypeDef *hcomp);
 /** @addtogroup COMP_Exported_Functions_Group4
   * @{
   */
-HAL_COMP_StateTypeDef HAL_COMP_GetState(const COMP_HandleTypeDef *hcomp);
-uint32_t              HAL_COMP_GetError(const COMP_HandleTypeDef *hcomp);
+HAL_COMP_StateTypeDef HAL_COMP_GetState(COMP_HandleTypeDef *hcomp);
+uint32_t              HAL_COMP_GetError(COMP_HandleTypeDef *hcomp);
 /**
   * @}
   */
@@ -746,3 +747,5 @@ uint32_t              HAL_COMP_GetError(const COMP_HandleTypeDef *hcomp);
 #endif
 
 #endif /* STM32L5xx_HAL_COMP_H */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

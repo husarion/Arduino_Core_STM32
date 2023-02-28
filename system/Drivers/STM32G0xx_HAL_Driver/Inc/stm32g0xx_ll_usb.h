@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2018 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -22,7 +23,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g0xx_hal_def.h"
@@ -70,15 +71,23 @@ typedef enum
   HC_IDLE = 0,
   HC_XFRC,
   HC_HALTED,
-  HC_ACK,
   HC_NAK,
   HC_NYET,
   HC_STALL,
   HC_XACTERR,
   HC_BBLERR,
-  HC_DATATGLERR
+  HC_DATATGLERR,
+  HC_ACK
 } USB_DRD_HCStateTypeDef;
 
+/**
+  * USB HOST Double buffer Isochronous State
+  */
+typedef enum
+{
+  USB_PMABUF_EMPTY = 0U,
+  USB_PMABUF_NOT_EMPTY = 1U
+} USB_BuffStateTypedDef;
 
 /**
   * @brief  USB Instance Initialization Structure definition
@@ -96,8 +105,6 @@ typedef struct
   uint32_t speed;                   /*!< USB Core speed.
                                          This parameter can be any value of @ref PCD_Speed/HCD_Speed
                                                                                  (HCD_SPEED_xxx, HCD_SPEED_xxx) */
-
-  uint32_t dma_enable;              /*!< dma_enable state unused, DMA not supported by FS instance              */
 
   uint32_t ep0_mps;                 /*!< Set the Endpoint 0 Max Packet size.                                    */
 
@@ -134,16 +141,16 @@ typedef struct
                                        This parameter can be any value of @ref USB_LL_EP_Type                   */
 
   uint16_t  pmaadress;            /*!< PMA Address
-                                       This parameter can be any value between Min_addr = 0 and Max_addr = 1K   */
+                                       This parameter can be any value between Min_addr = 0 and Max_addr = 1K    */
 
   uint16_t  pmaaddr0;             /*!< PMA Address0
-                                       This parameter can be any value between Min_addr = 0 and Max_addr = 1K   */
+                                       This parameter can be any value between Min_addr = 0 and Max_addr = 1K    */
 
   uint16_t  pmaaddr1;             /*!< PMA Address1
-                                       This parameter can be any value between Min_addr = 0 and Max_addr = 1K   */
+                                       This parameter can be any value between Min_addr = 0 and Max_addr = 1K    */
 
   uint8_t   doublebuffer;         /*!< Double buffer enable
-                                       This parameter can be 0 or 1                                             */
+                                       This parameter can be 0 or 1                                              */
 
   uint8_t   data_pid_start;       /*!< Initial data PID
                                        This parameter must be a number between Min_Data = 0 and Max_Data = 1    */
@@ -206,19 +213,23 @@ typedef struct
   uint8_t   toggle_out;         /*!< OUT transfer current toggle flag
                                      This parameter must be a number between Min_Data = 0 and Max_Data = 1      */
 
-  uint32_t  ErrCnt;             /*!< Host channel error count.                                                  */
+  uint32_t  ErrCnt;             /*!< Host channel error count.                                                 */
 
   uint16_t  pmaadress;          /*!< PMA Address
-                                     This parameter can be any value between Min_addr = 0 and Max_addr = 1K     */
+                                     This parameter can be any value between Min_addr = 0 and Max_addr = 1K    */
 
   uint16_t  pmaaddr0;           /*!< PMA Address0
-                                     This parameter can be any value between Min_addr = 0 and Max_addr = 1K     */
+                                     This parameter can be any value between Min_addr = 0 and Max_addr = 1K    */
 
   uint16_t  pmaaddr1;           /*!< PMA Address1
-                                     This parameter can be any value between Min_addr = 0 and Max_addr = 1K     */
+                                     This parameter can be any value between Min_addr = 0 and Max_addr = 1K    */
 
   uint8_t   doublebuffer;       /*!< Double buffer enable
-                                     This parameter can be 0 or 1                                               */
+                                     This parameter can be 0 or 1                                              */
+
+  USB_BuffStateTypedDef  pmabuff0_state;   /*!< PMA Buffer0 State empty / notEmpty : used in double buffer OUT isochronous */
+
+  USB_BuffStateTypedDef  pmabuff1_state;   /*!< PMA Buffer1 State empty / notEmpty : used in double buffer OUT isochronous */
 
   USB_DRD_URBStateTypeDef urb_state;  /*!< URB state.
                                             This parameter can be any value of @ref USB_OTG_URBStateTypeDef */
@@ -272,10 +283,6 @@ typedef struct
 
 #define EP_ADDR_MSK                            0x7U
 
-#ifndef USE_USB_DOUBLE_BUFFER
-#define USE_USB_DOUBLE_BUFFER                  1U
-#endif /* USE_USB_DOUBLE_BUFFER */
-
 /*!< USB Speed */
 #define USB_DRD_SPEED_FS                       1U
 #define USB_DRD_SPEED_LS                       2U
@@ -296,17 +303,17 @@ typedef struct
 #define USB_DRD_USED_CHANNELS                  8U
 #endif /* USB_DRD_USED_CHANNELS */
 
-/**
-  * used for USB_HC_DoubleBuffer API
-  */
-#define USB_DRD_BULK_DBUFF_ENBALE                   1U
-#define USB_DRD_BULK_DBUFF_DISABLE                  2U
-#define USB_DRD_ISOC_DBUFF_ENBALE                   3U
-#define USB_DRD_ISOC_DBUFF_DISABLE                  4U
-
 /* First available address in PMA */
 #define PMA_START_ADDR          (0x10U + (8U *(USB_DRD_USED_CHANNELS - 2U)))
 #define PMA_END_ADDR             USB_DRD_PMA_SIZE
+
+
+/**
+  * used for USB_HC_DoubleBuffer API
+  */
+#define USB_DRD_DBUFF_ENBALE                   1U
+#define USB_DRD_DBUFF_DISABLE                  2U
+
 
 /* Exported macro ------------------------------------------------------------*/
 /**
@@ -332,7 +339,7 @@ typedef struct
   * @param   bEpChNum, bDir
   * @retval None
   */
-#define USB_DRD_FREE_USER_BUFFER(USBx, bEpChNum, bDir) \
+#define USB_DRD_FreeUserBuffer(USBx, bEpChNum, bDir) \
   do { \
     if ((bDir) == 0U) \
     { \
@@ -460,11 +467,11 @@ typedef struct
   * @param  bEpChNum Endpoint Number.
   * @retval status
   */
-#define USB_DRD_GET_CHEP_TX_STATUS(USBx, bEpChNum) \
-  ((uint16_t)USB_DRD_GET_CHEP((USBx), (bEpChNum)) & USB_DRD_CHEP_TX_STTX)
+#define USB_DRD_GET_CHEP_TX_STATUS(USBx, bEpChNum)     ((uint16_t)USB_DRD_GET_CHEP((USBx), (bEpChNum))\
+                                                        & USB_DRD_CHEP_TX_STTX)
 
-#define USB_DRD_GET_CHEP_RX_STATUS(USBx, bEpChNum) \
-  ((uint16_t)USB_DRD_GET_CHEP((USBx), (bEpChNum)) & USB_DRD_CHEP_RX_STRX)
+#define USB_DRD_GET_CHEP_RX_STATUS(USBx, bEpChNum)     ((uint16_t)USB_DRD_GET_CHEP((USBx), (bEpChNum))\
+                                                        & USB_DRD_CHEP_RX_STRX)
 
 
 /**
@@ -661,22 +668,18 @@ typedef struct
     uint32_t wNBlocks; \
     \
     (pdwReg) &= USB_PMA_RXBD_COUNTMSK; \
-    \
-    if ((wCount) > 62U) \
+    if ((wCount) == 0U) \
     { \
-      USB_DRD_CALC_BLK32((pdwReg), (wCount), wNBlocks); \
+      (pdwReg) &= (uint32_t)~USB_CNTRX_NBLK_MSK; \
+      (pdwReg) |= USB_CNTRX_BLSIZE; \
+    } \
+    else if((wCount) <= 62U) \
+    { \
+      USB_DRD_CALC_BLK2((pdwReg), (wCount), wNBlocks); \
     } \
     else \
     { \
-      if ((wCount) == 0U) \
-      { \
-        (pdwReg) &= (uint32_t)~USB_CNTRX_NBLK_MSK; \
-        (pdwReg) |= USB_CNTRX_BLSIZE; \
-      } \
-      else \
-      { \
-        USB_DRD_CALC_BLK2((pdwReg), (wCount), wNBlocks); \
-      } \
+      USB_DRD_CALC_BLK32((pdwReg), (wCount), wNBlocks); \
     } \
   } while(0) /* USB_DRD_SET_CHEP_CNT_RX_REG */
 
@@ -697,11 +700,13 @@ typedef struct
     (USB_DRD_PMA_BUFF + (bEpChNum))->TXBD |= (uint32_t)((uint32_t)(wCount) << 16U); \
   } while(0)
 
-#define USB_DRD_SET_CHEP_RX_DBUF0_CNT(USBx, bEpChNum, wCount) \
-  USB_DRD_SET_CHEP_CNT_RX_REG(((USB_DRD_PMA_BUFF + (bEpChNum))->TXBD), (wCount))
 
-#define USB_DRD_SET_CHEP_RX_CNT(USBx, bEpChNum, wCount) \
-  USB_DRD_SET_CHEP_CNT_RX_REG(((USB_DRD_PMA_BUFF + (bEpChNum))->RXBD), (wCount))
+#define USB_DRD_SET_CHEP_RX_DBUF0_CNT(USBx, bEpChNum, wCount)      USB_DRD_SET_CHEP_CNT_RX_REG(((USB_DRD_PMA_BUFF\
+                                                                   + (bEpChNum))->TXBD), (wCount))
+
+#define USB_DRD_SET_CHEP_RX_CNT(USBx, bEpChNum, wCount)            USB_DRD_SET_CHEP_CNT_RX_REG(((USB_DRD_PMA_BUFF\
+                                                                   + (bEpChNum))->RXBD), (wCount))
+
 
 /**
   * @brief  gets counter of the tx buffer.
@@ -724,11 +729,8 @@ typedef struct
   * @param  wBuf0Addr buffer 0 address.
   * @retval Counter value
   */
-#define USB_DRD_SET_CHEP_DBUF0_ADDR(USBx, bEpChNum, wBuf0Addr) \
-  USB_DRD_SET_CHEP_TX_ADDRESS((USBx), (bEpChNum), (wBuf0Addr))
-
-#define USB_DRD_SET_CHEP_DBUF1_ADDR(USBx, bEpChNum, wBuf1Addr) \
-  USB_DRD_SET_CHEP_RX_ADDRESS((USBx), (bEpChNum), (wBuf1Addr))
+#define USB_DRD_SET_CHEP_DBUF0_ADDR(USBx, bEpChNum, wBuf0Addr)    USB_DRD_SET_CHEP_TX_ADDRESS((USBx), (bEpChNum), (wBuf0Addr))
+#define USB_DRD_SET_CHEP_DBUF1_ADDR(USBx, bEpChNum, wBuf1Addr)    USB_DRD_SET_CHEP_RX_ADDRESS((USBx), (bEpChNum), (wBuf1Addr))
 
 
 /**
@@ -831,8 +833,7 @@ HAL_StatusTypeDef USB_DeactivateEndpoint(USB_DRD_TypeDef *USBx, USB_DRD_EPTypeDe
 HAL_StatusTypeDef USB_EPStartXfer(USB_DRD_TypeDef *USBx, USB_DRD_EPTypeDef *ep);
 HAL_StatusTypeDef USB_EPSetStall(USB_DRD_TypeDef *USBx, USB_DRD_EPTypeDef *ep);
 HAL_StatusTypeDef USB_EPClearStall(USB_DRD_TypeDef *USBx, USB_DRD_EPTypeDef *ep);
-HAL_StatusTypeDef USB_EPStopXfer(USB_DRD_TypeDef *USBx, USB_DRD_EPTypeDef *ep);
-#endif /* defined (HAL_PCD_MODULE_ENABLED) */
+#endif /* HAL_PCD_MODULE_ENABLED */
 
 HAL_StatusTypeDef USB_SetDevAddress(USB_DRD_TypeDef *USBx, uint8_t address);
 HAL_StatusTypeDef USB_DevConnect(USB_DRD_TypeDef *USBx);
@@ -881,7 +882,9 @@ void              USB_ReadPMA(USB_DRD_TypeDef *USBx, uint8_t *pbUsrBuf,
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
 
 
 #endif /* STM32G0xx_LL_USB_H */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

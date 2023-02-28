@@ -58,10 +58,10 @@
   * @{
   */
 /* USART RX FIFO depth */
-#define RX_FIFO_DEPTH 16U
+#define RX_FIFO_DEPTH 8U
 
 /* USART TX FIFO depth */
-#define TX_FIFO_DEPTH 16U
+#define TX_FIFO_DEPTH 8U
 /**
   * @}
   */

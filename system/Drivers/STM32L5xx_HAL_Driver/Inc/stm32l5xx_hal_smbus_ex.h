@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -36,6 +37,7 @@ extern "C" {
   */
 
 /* Exported types ------------------------------------------------------------*/
+
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SMBUSEx_Exported_Constants SMBUS Extended Exported Constants
   * @{
@@ -74,17 +76,7 @@ extern "C" {
   * @{
   */
 
-/** @addtogroup SMBUSEx_Exported_Functions_Group2 WakeUp Mode Functions
-  * @{
-  */
-/* Peripheral Control functions  ************************************************/
-HAL_StatusTypeDef HAL_SMBUSEx_EnableWakeUp(SMBUS_HandleTypeDef *hsmbus);
-HAL_StatusTypeDef HAL_SMBUSEx_DisableWakeUp(SMBUS_HandleTypeDef *hsmbus);
-/**
-  * @}
-  */
-
-/** @addtogroup SMBUSEx_Exported_Functions_Group3 Fast Mode Plus Functions
+/** @addtogroup SMBUSEx_Exported_Functions_Group3 SMBUS Extended FastModePlus Functions
   * @{
   */
 void HAL_SMBUSEx_EnableFastModePlus(uint32_t ConfigFastModePlus);
@@ -110,13 +102,13 @@ void HAL_SMBUSEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 /** @defgroup SMBUSEx_Private_Macro SMBUS Extended Private Macros
   * @{
   */
-#define IS_SMBUS_FASTMODEPLUS(__CONFIG__) ((((__CONFIG__) & (SMBUS_FASTMODEPLUS_PB6))  == SMBUS_FASTMODEPLUS_PB6)   || \
-                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_PB7))  == SMBUS_FASTMODEPLUS_PB7)   || \
-                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_PB8))  == SMBUS_FASTMODEPLUS_PB8)   || \
-                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_PB9))  == SMBUS_FASTMODEPLUS_PB9)   || \
-                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_I2C1)) == SMBUS_FASTMODEPLUS_I2C1)  || \
-                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_I2C2)) == SMBUS_FASTMODEPLUS_I2C2)  || \
-                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_I2C3)) == SMBUS_FASTMODEPLUS_I2C3)  || \
+#define IS_SMBUS_FASTMODEPLUS(__CONFIG__) ((((__CONFIG__) & (SMBUS_FASTMODEPLUS_PB6))  == SMBUS_FASTMODEPLUS_PB6)     || \
+                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_PB7))  == SMBUS_FASTMODEPLUS_PB7)     || \
+                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_PB8))  == SMBUS_FASTMODEPLUS_PB8)     || \
+                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_PB9))  == SMBUS_FASTMODEPLUS_PB9)     || \
+                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_I2C1)) == SMBUS_FASTMODEPLUS_I2C1)    || \
+                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_I2C2)) == SMBUS_FASTMODEPLUS_I2C2)    || \
+                                           (((__CONFIG__) & (SMBUS_FASTMODEPLUS_I2C3)) == SMBUS_FASTMODEPLUS_I2C3)    || \
                                            (((__CONFIG__) & (SMBUS_FASTMODEPLUS_I2C4)) == SMBUS_FASTMODEPLUS_I2C4))
 /**
   * @}
@@ -144,3 +136,5 @@ void HAL_SMBUSEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 #endif
 
 #endif /* STM32L5xx_HAL_SMBUS_EX_H */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

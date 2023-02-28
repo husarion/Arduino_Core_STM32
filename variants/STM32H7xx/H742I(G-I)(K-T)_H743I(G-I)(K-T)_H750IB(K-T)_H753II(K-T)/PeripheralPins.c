@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2020, STMicroelectronics
+ * Copyright (c) 2020-2021, STMicroelectronics
  * All rights reserved.
  *
  * This software component is licensed by ST under BSD 3-Clause license,
@@ -14,9 +14,11 @@
  * Automatically generated from STM32H742I(G-I)Kx.xml, STM32H742I(G-I)Tx.xml
  * STM32H743IGKx.xml, STM32H743IGTx.xml
  * STM32H743IIKx.xml, STM32H743IITx.xml
+ * STM32H747BGTx.xml, STM32H747BITx.xml
  * STM32H750IBKx.xml, STM32H750IBTx.xml
  * STM32H753IIKx.xml, STM32H753IITx.xml
- * CubeMX DB release 6.0.70
+ * STM32H757BITx.xml
+ * CubeMX DB release 6.0.30
  */
 #if !defined(CUSTOM_PERIPHERAL_PINS)
 #include "Arduino.h"
@@ -464,7 +466,7 @@ WEAK const PinMap PinMap_CAN_TD[] = {
 
 //*** ETHERNET ***
 
-#if defined(HAL_ETH_MODULE_ENABLED) || defined(HAL_ETH_LEGACY_MODULE_ENABLED)
+#ifdef HAL_ETH_MODULE_ENABLED
 WEAK const PinMap PinMap_Ethernet[] = {
   {PA_0,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_CRS
   {PA_1,      ETH, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_PULLUP, GPIO_AF11_ETH)}, // ETH_REF_CLK

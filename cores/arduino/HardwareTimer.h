@@ -30,10 +30,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "timer.h"
 #include "stm32yyxx_ll_tim.h"
+#include "stm32f4xx_ll_bus.h"
+#include "pinconfig.h"
 
 #if defined(HAL_TIM_MODULE_ENABLED) && !defined(HAL_TIM_MODULE_ONLY)
 
 #define  TIMER_CHANNELS 4    // channel5 and channel 6 are not considered here has they don't have gpio output and they don't have interrupt
+
 
 typedef enum {
   TIMER_DISABLED,                         // == TIM_OCMODE_TIMING           no output, useful for only-interrupt
@@ -51,6 +54,9 @@ typedef enum {
   TIMER_INPUT_CAPTURE_RISING,             // == TIM_INPUTCHANNELPOLARITY_RISING
   TIMER_INPUT_CAPTURE_FALLING,            // == TIM_INPUTCHANNELPOLARITY_FALLING
   TIMER_INPUT_CAPTURE_BOTHEDGE,           // == TIM_INPUTCHANNELPOLARITY_BOTHEDGE
+  TIMER_INPUT_ENCODER_MODE1,
+  TIMER_INPUT_ENCODER_MODE2,
+  TIMER_INPUT_ENCODER_MODE12,
 
   // Used 2 channels for a single pin. One channel in TIM_INPUTCHANNELPOLARITY_RISING another channel in TIM_INPUTCHANNELPOLARITY_FALLING.
   // Channels must be used by pair: CH1 with CH2, or CH3 with CH4
@@ -107,6 +113,7 @@ class HardwareTimer {
     void pause(void);  // Pause counter and all output channels
     void pauseChannel(uint32_t channel); // Timer is still running but channel (output and interrupt) is disabled
     void resume(void); // Resume counter and all output channels
+    void resumeIT(void); // Resume counter and all output channels
     void resumeChannel(uint32_t channel); // Resume only one channel
 
     void setPrescaleFactor(uint32_t prescaler); // set prescaler register (which is factor value - 1)
@@ -120,9 +127,10 @@ class HardwareTimer {
 
     void setCount(uint32_t val, TimerFormat_t format = TICK_FORMAT); // set timer counter to value 'val' depending on format provided
     uint32_t getCount(TimerFormat_t format = TICK_FORMAT);  // return current counter value of timer depending on format provided
+    int8_t getUnderOverFlow(uint16_t timer_overflow_value);  //return and clear overflow/underflow flag 
 
-    void setMode(uint32_t channel, TimerModes_t mode, PinName pin = NC); // Configure timer channel with specified mode on specified pin if available
-    void setMode(uint32_t channel, TimerModes_t mode, uint32_t pin);
+    void setMode(uint32_t channel, TimerModes_t mode, PinName pin = NC, PinName pin2 = NC); // Configure timer channel with specified mode on specified pin if available
+    void setMode(uint32_t channel, TimerModes_t mode, uint32_t pin, uint32_t pin2);
 
     TimerModes_t getMode(uint32_t channel);  // Retrieve configured mode
 
@@ -151,8 +159,6 @@ class HardwareTimer {
     static void captureCompareCallback(TIM_HandleTypeDef *htim); // Generic Capture and Compare callback which will call user callback
     static void updateCallback(TIM_HandleTypeDef *htim);  // Generic Update (rollover) callback which will call user callback
 
-    void updateRegistersIfNotRunning(TIM_TypeDef *TIMx); // Take into account registers update immediately if timer is not running,
-
     bool isRunning(); // return true if HardwareTimer is running
     bool isRunningChannel(uint32_t channel); // return true if channel is running
 
@@ -172,7 +178,6 @@ class HardwareTimer {
 };
 
 extern timerObj_t *HardwareTimer_Handle[TIMER_NUM];
-
 extern timer_index_t get_timer_index(TIM_TypeDef *htim);
 
 #endif /* __cplusplus */

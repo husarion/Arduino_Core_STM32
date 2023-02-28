@@ -11,18 +11,7 @@
   *           + IRQ handler management
   *           + Peripheral State functions
   *
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  @verbatim
+  *  @verbatim
   ================================================================================
             ##### How to use this driver #####
   ================================================================================
@@ -90,9 +79,9 @@
 
   The compilation define  USE_HAL_CORDIC_REGISTER_CALLBACKS when set to 1
   allows the user to configure dynamically the driver callbacks.
-  Use Function HAL_CORDIC_RegisterCallback() to register an interrupt callback.
+  Use Function @ref HAL_CORDIC_RegisterCallback() to register an interrupt callback.
 
-  Function HAL_CORDIC_RegisterCallback() allows to register following callbacks:
+  Function @ref HAL_CORDIC_RegisterCallback() allows to register following callbacks:
     (+) ErrorCallback             : Error Callback.
     (+) CalculateCpltCallback     : Calculate complete Callback.
     (+) MspInitCallback           : CORDIC MspInit.
@@ -100,9 +89,9 @@
   This function takes as parameters the HAL peripheral handle, the Callback ID
   and a pointer to the user callback function.
 
-  Use function HAL_CORDIC_UnRegisterCallback() to reset a callback to the default
+  Use function @ref HAL_CORDIC_UnRegisterCallback() to reset a callback to the default
   weak function.
-  HAL_CORDIC_UnRegisterCallback takes as parameters the HAL peripheral handle,
+  @ref HAL_CORDIC_UnRegisterCallback takes as parameters the HAL peripheral handle,
   and the Callback ID.
   This function allows to reset following callbacks:
     (+) ErrorCallback             : Error Callback.
@@ -112,11 +101,11 @@
 
   By default, after the HAL_CORDIC_Init() and when the state is HAL_CORDIC_STATE_RESET,
   all callbacks are set to the corresponding weak functions:
-  examples HAL_CORDIC_ErrorCallback(), HAL_CORDIC_CalculateCpltCallback().
+  examples @ref HAL_CORDIC_ErrorCallback(), @ref HAL_CORDIC_CalculateCpltCallback().
   Exception done for MspInit and MspDeInit functions that are
-  reset to the legacy weak function in the HAL_CORDIC_Init()/ HAL_CORDIC_DeInit() only when
+  reset to the legacy weak function in the HAL_CORDIC_Init()/ @ref HAL_CORDIC_DeInit() only when
   these callbacks are null (not registered beforehand).
-  if not, MspInit or MspDeInit are not null, the HAL_CORDIC_Init()/ HAL_CORDIC_DeInit()
+  if not, MspInit or MspDeInit are not null, the HAL_CORDIC_Init()/ @ref HAL_CORDIC_DeInit()
   keep and use the user MspInit/MspDeInit callbacks (registered beforehand)
 
   Callbacks can be registered/unregistered in HAL_CORDIC_STATE_READY state only.
@@ -124,7 +113,7 @@
   in HAL_CORDIC_STATE_READY or HAL_CORDIC_STATE_RESET state,
   thus registered (user) MspInit/DeInit callbacks can be used during the Init/DeInit.
   In that case first register the MspInit/MspDeInit user callbacks
-  using HAL_CORDIC_RegisterCallback() before calling HAL_CORDIC_DeInit()
+  using @ref HAL_CORDIC_RegisterCallback() before calling @ref HAL_CORDIC_DeInit()
   or HAL_CORDIC_Init() function.
 
   When The compilation define USE_HAL_CORDIC_REGISTER_CALLBACKS is set to 0 or
@@ -132,6 +121,18 @@
   are set to the corresponding weak functions.
 
   @endverbatim
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
+  *
   ******************************************************************************
   */
 
@@ -159,8 +160,8 @@
 /** @defgroup CORDIC_Private_Functions CORDIC Private Functions
   * @{
   */
-static void CORDIC_WriteInDataIncrementPtr(const CORDIC_HandleTypeDef *hcordic, const int32_t **ppInBuff);
-static void CORDIC_ReadOutDataIncrementPtr(const CORDIC_HandleTypeDef *hcordic, int32_t **ppOutBuff);
+static void CORDIC_WriteInDataIncrementPtr(CORDIC_HandleTypeDef *hcordic, int32_t **ppInBuff);
+static void CORDIC_ReadOutDataIncrementPtr(CORDIC_HandleTypeDef *hcordic, int32_t **ppOutBuff);
 static void CORDIC_DMAInCplt(DMA_HandleTypeDef *hdma);
 static void CORDIC_DMAOutCplt(DMA_HandleTypeDef *hdma);
 static void CORDIC_DMAError(DMA_HandleTypeDef *hdma);
@@ -555,7 +556,7 @@ HAL_StatusTypeDef HAL_CORDIC_UnRegisterCallback(CORDIC_HandleTypeDef *hcordic, H
   *         contains the CORDIC configuration information.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_CORDIC_Configure(CORDIC_HandleTypeDef *hcordic, const CORDIC_ConfigTypeDef *sConfig)
+HAL_StatusTypeDef HAL_CORDIC_Configure(CORDIC_HandleTypeDef *hcordic, CORDIC_ConfigTypeDef *sConfig)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -602,12 +603,12 @@ HAL_StatusTypeDef HAL_CORDIC_Configure(CORDIC_HandleTypeDef *hcordic, const CORD
   * @param  Timeout Specify Timeout value
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_CORDIC_Calculate(CORDIC_HandleTypeDef *hcordic, const int32_t *pInBuff, int32_t *pOutBuff,
+HAL_StatusTypeDef HAL_CORDIC_Calculate(CORDIC_HandleTypeDef *hcordic, int32_t *pInBuff, int32_t *pOutBuff,
                                        uint32_t NbCalc, uint32_t Timeout)
 {
   uint32_t tickstart;
   uint32_t index;
-  const int32_t *p_tmp_in_buff = pInBuff;
+  int32_t *p_tmp_in_buff = pInBuff;
   int32_t *p_tmp_out_buff = pOutBuff;
 
   /* Check parameters setting */
@@ -696,12 +697,12 @@ HAL_StatusTypeDef HAL_CORDIC_Calculate(CORDIC_HandleTypeDef *hcordic, const int3
   * @param  Timeout Specify Timeout value
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_CORDIC_CalculateZO(CORDIC_HandleTypeDef *hcordic, const int32_t *pInBuff, int32_t *pOutBuff,
+HAL_StatusTypeDef HAL_CORDIC_CalculateZO(CORDIC_HandleTypeDef *hcordic, int32_t *pInBuff, int32_t *pOutBuff,
                                          uint32_t NbCalc, uint32_t Timeout)
 {
   uint32_t tickstart;
   uint32_t index;
-  const int32_t *p_tmp_in_buff = pInBuff;
+  int32_t *p_tmp_in_buff = pInBuff;
   int32_t *p_tmp_out_buff = pOutBuff;
 
   /* Check parameters setting */
@@ -789,10 +790,10 @@ HAL_StatusTypeDef HAL_CORDIC_CalculateZO(CORDIC_HandleTypeDef *hcordic, const in
   * @param  NbCalc Number of CORDIC calculation to process.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_CORDIC_Calculate_IT(CORDIC_HandleTypeDef *hcordic, const int32_t *pInBuff, int32_t *pOutBuff,
+HAL_StatusTypeDef HAL_CORDIC_Calculate_IT(CORDIC_HandleTypeDef *hcordic, int32_t *pInBuff, int32_t *pOutBuff,
                                           uint32_t NbCalc)
 {
-  const int32_t *tmp_pInBuff = pInBuff;
+  int32_t *tmp_pInBuff = pInBuff;
 
   /* Check parameters setting */
   if ((pInBuff == NULL) || (pOutBuff == NULL) || (NbCalc == 0U))
@@ -881,7 +882,7 @@ HAL_StatusTypeDef HAL_CORDIC_Calculate_IT(CORDIC_HandleTypeDef *hcordic, const i
   *         DMA transfer to and from the Peripheral.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_CORDIC_Calculate_DMA(CORDIC_HandleTypeDef *hcordic, const int32_t *pInBuff, int32_t *pOutBuff,
+HAL_StatusTypeDef HAL_CORDIC_Calculate_DMA(CORDIC_HandleTypeDef *hcordic, int32_t *pInBuff, int32_t *pOutBuff,
                                            uint32_t NbCalc, uint32_t DMADirection)
 {
   uint32_t sizeinbuff;
@@ -1169,7 +1170,7 @@ void HAL_CORDIC_IRQHandler(CORDIC_HandleTypeDef *hcordic)
   *         the configuration information for CORDIC module
   * @retval HAL state
   */
-HAL_CORDIC_StateTypeDef HAL_CORDIC_GetState(const CORDIC_HandleTypeDef *hcordic)
+HAL_CORDIC_StateTypeDef HAL_CORDIC_GetState(CORDIC_HandleTypeDef *hcordic)
 {
   /* Return CORDIC handle state */
   return hcordic->State;
@@ -1182,7 +1183,7 @@ HAL_CORDIC_StateTypeDef HAL_CORDIC_GetState(const CORDIC_HandleTypeDef *hcordic)
   * @note   The returned error is a bit-map combination of possible errors
   * @retval Error bit-map
   */
-uint32_t HAL_CORDIC_GetError(const CORDIC_HandleTypeDef *hcordic)
+uint32_t HAL_CORDIC_GetError(CORDIC_HandleTypeDef *hcordic)
 {
   /* Return CORDIC error code */
   return hcordic->ErrorCode;
@@ -1207,7 +1208,7 @@ uint32_t HAL_CORDIC_GetError(const CORDIC_HandleTypeDef *hcordic)
   * @param  ppInBuff Pointer to pointer to input buffer.
   * @retval none
   */
-static void CORDIC_WriteInDataIncrementPtr(const CORDIC_HandleTypeDef *hcordic, const int32_t **ppInBuff)
+static void CORDIC_WriteInDataIncrementPtr(CORDIC_HandleTypeDef *hcordic, int32_t **ppInBuff)
 {
   /* First write of input data in the Write Data register */
   WRITE_REG(hcordic->Instance->WDATA, (uint32_t) **ppInBuff);
@@ -1233,7 +1234,7 @@ static void CORDIC_WriteInDataIncrementPtr(const CORDIC_HandleTypeDef *hcordic, 
   * @param  ppOutBuff Pointer to pointer to output buffer.
   * @retval none
   */
-static void CORDIC_ReadOutDataIncrementPtr(const CORDIC_HandleTypeDef *hcordic, int32_t **ppOutBuff)
+static void CORDIC_ReadOutDataIncrementPtr(CORDIC_HandleTypeDef *hcordic, int32_t **ppOutBuff)
 {
   /* First read of output data from the Read Data register */
   **ppOutBuff = (int32_t)READ_REG(hcordic->Instance->RDATA);
@@ -1351,3 +1352,5 @@ static void CORDIC_DMAError(DMA_HandleTypeDef *hdma)
 
 #endif /* HAL_CORDIC_MODULE_ENABLED */
 #endif /* CORDIC */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -395,3 +395,4 @@ ErrorStatus LL_PLL_ConfigSystemClock_HSE(uint32_t HSEFrequency,
 
 #endif /* STM32MP1xx_LL_UTILS_H */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -122,7 +122,6 @@ struct i2c_s {
   volatile uint8_t slaveMode;
   uint8_t isMaster;
   uint8_t generalCall;
-  uint8_t NoStretchMode;
 };
 
 ///@brief I2C state

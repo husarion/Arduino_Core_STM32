@@ -11,12 +11,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the 
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -101,7 +102,7 @@ void HAL_PWR_DeInit(void)
 {
   /* Apply reset values to all PWR registers */
   /* Note: Update of each register required since PWR global reset is not     */
-  /*       available at RCC level on this STM32 series.                       */
+  /*       available at RCC level on this STM32 serie.                        */
   LL_PWR_WriteReg(CR1, PWR_CR1_RESET_VALUE);
   LL_PWR_WriteReg(CR2, PWR_CR2_RESET_VALUE);
   LL_PWR_WriteReg(CR3, PWR_CR3_RESET_VALUE);
@@ -224,7 +225,7 @@ void HAL_PWR_DisableBkUpAccess(void)
       (+) Stop 2 mode: all clocks are stopped except LSI and LSE, main regulator off, low power regulator on, reduced set of waking up IPs compared to Stop 1 mode.
 
       (+) Standby mode with SRAM2a: all clocks are stopped except LSI and LSE, SRAM2a content preserved, main regulator off, low power regulator on.
-          Note: On devices STM32WB15xx, STM32WB10xx, STM32WB1Mxx retention is extended to SRAM1, SRAM2a, SRAM2b.
+          Note: On devices STM32WB15xx, STM32WB10xx, retention is extended to SRAM1, SRAM2a, SRAM2b.
       (+) Standby mode without SRAM2a: all clocks are stopped except LSI and LSE, main and low power regulators off.
 
       (+) Shutdown mode: all clocks are stopped except LSE, main and low power regulators off.
@@ -268,7 +269,7 @@ void HAL_PWR_DisableBkUpAccess(void)
           The Stop 0, Stop 1 or Stop 2 modes are entered thru the following API's:
           (++) HAL_PWREx_EnterSTOP0Mode() for mode 0, HAL_PWREx_EnterSTOP1Mode() for mode 1, HAL_PWREx_EnterSTOP2Mode() for mode 2
                or for porting reasons HAL_PWR_EnterSTOPMode().
-               Note: Low power Stop2 mode is not available on devices STM32WB15xx, STM32WB10xx, STM32WB1Mxx.
+               Note: Low power Stop2 mode is not available on devices STM32WB15xx, STM32WB10xx.
 
       (+) Regulator setting (applicable to HAL_PWR_EnterSTOPMode() only):
           (++) PWR_MAINREGULATOR_ON: Regulator in main mode (STOP0 mode)
@@ -374,7 +375,7 @@ HAL_StatusTypeDef HAL_PWR_ConfigPVD(PWR_PVDTypeDef *sConfigPVD)
   
   /* Clear any previous config. Keep it clear if no event or IT mode is selected */
   
-  /* Note: On STM32WB series, power PVD event is not available on AIEC lines   */
+  /* Note: On STM32WB serie, power PVD event is not available on AIEC lines   */
   /*       (only interruption is available through AIEC line 16).             */
   __HAL_PWR_PVD_EXTI_DISABLE_IT();      /*CPU1*/
   __HAL_PWR_PVD_EXTIC2_DISABLE_IT();    /*CPU2*/
@@ -717,3 +718,4 @@ __weak void HAL_PWR_PVDCallback(void)
   * @}
   */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -8,15 +8,17 @@
   *           + Extended Peripheral Control functions
   *           + Extended Clock management functions
   *           + Extended Clock Recovery System Control functions
+  *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -38,14 +40,14 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup RCCEx_Private_Constants RCCEx Private Constants
-  * @{
-  */
+ * @{
+ */
 #if defined(SAI1)
 #define PLLSAI1_TIMEOUT_VALUE    (2U)    /* 2 ms (minimum Tick + 1) */
-#endif /* SAI1 */
+#endif
 #define PLL_TIMEOUT_VALUE        (2U)    /* 2 ms (minimum Tick + 1) */
 
-#define CLOCKSMPS_TIMEOUT_VALUE  (5000U) /* 5 s */
+#define CLOCKSMPS_TIMEOUT_VALUE  (5000U) /* 5 s    */
 
 #define __LSCO1_CLK_ENABLE()   __HAL_RCC_GPIOA_CLK_ENABLE()
 #define LSCO1_GPIO_PORT        GPIOA
@@ -59,9 +61,9 @@
 #define __LSCO3_CLK_ENABLE()   __HAL_RCC_GPIOC_CLK_ENABLE()
 #define LSCO3_GPIO_PORT        GPIOC
 #define LSCO3_PIN              GPIO_PIN_12
-#endif /* RCC_LSCO3_SUPPORT */
+#endif
 
-#define LSI2_TIMEOUT_VALUE         (3U)   /* to be adjusted with DS    */
+#define LSI2_TIMEOUT_VALUE         (3U)    /* to be adjusted with DS    */
 
 /**
   * @}
@@ -71,13 +73,13 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup RCCEx_Private_Functions RCCEx Private Functions
-  * @{
-  */
+ * @{
+ */
 #if defined(SAI1)
 static HAL_StatusTypeDef RCCEx_PLLSAI1_ConfigNP(RCC_PLLSAI1InitTypeDef *PLLSAI1);
 static HAL_StatusTypeDef RCCEx_PLLSAI1_ConfigNQ(RCC_PLLSAI1InitTypeDef *PLLSAI1);
 static HAL_StatusTypeDef RCCEx_PLLSAI1_ConfigNR(RCC_PLLSAI1InitTypeDef *PLLSAI1);
-#endif /* SAI1 */
+#endif
 
 static uint32_t          RCC_PLL_GetFreqDomain_P(void);
 static uint32_t          RCC_PLL_GetFreqDomain_Q(void);
@@ -86,7 +88,7 @@ static uint32_t          RCC_PLL_GetFreqDomain_Q(void);
 static uint32_t          RCC_PLLSAI1_GetFreqDomain_R(void);
 static uint32_t          RCC_PLLSAI1_GetFreqDomain_P(void);
 static uint32_t          RCC_PLLSAI1_GetFreqDomain_Q(void);
-#endif /* SAI1 */
+#endif
 
 /**
   * @}
@@ -99,8 +101,8 @@ static uint32_t          RCC_PLLSAI1_GetFreqDomain_Q(void);
   */
 
 /** @defgroup RCCEx_Exported_Functions_Group1 Extended Peripheral Control functions
-  *  @brief  Extended Peripheral Control functions
-  *
+ *  @brief  Extended Peripheral Control functions
+ *
 @verbatim
  ===============================================================================
                 ##### Extended Peripheral Control functions  #####
@@ -169,11 +171,13 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
         /* SAI1 clock source config set later after clock selection check */
         break;
 
+#if defined(SAI1)
       case RCC_SAI1CLKSOURCE_PLLSAI1: /* PLLSAI1 is used as clock source for SAI1 */
         /* PLLSAI1 parameters N & P configuration and clock output (PLLSAI1ClockOut) */
         ret = RCCEx_PLLSAI1_ConfigNP(&(PeriphClkInit->PLLSAI1));
         /* SAI1 clock source config set later after clock selection check */
         break;
+#endif
 
       case RCC_SAI1CLKSOURCE_PIN:      /* External clock is used as source of SAI1 clock*/
         /* SAI1 clock source config set later after clock selection check */
@@ -199,7 +203,7 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
       status = ret;
     }
   }
-#endif /* SAI1 */
+#endif
 
   /*-------------------------- RTC clock source configuration ----------------------*/
   if ((PeriphClkInit->PeriphClockSelection & RCC_PERIPHCLK_RTC) == RCC_PERIPHCLK_RTC)
@@ -285,7 +289,7 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
     /* Configure the LPUAR1 clock source */
     __HAL_RCC_LPUART1_CONFIG(PeriphClkInit->Lpuart1ClockSelection);
   }
-#endif /* LPUART1 */
+#endif
 
   /*-------------------------- LPTIM1 clock source configuration -------------------*/
   if (((PeriphClkInit->PeriphClockSelection) & RCC_PERIPHCLK_LPTIM1) == (RCC_PERIPHCLK_LPTIM1))
@@ -321,7 +325,7 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
     /* Configure the I2C3 clock source */
     __HAL_RCC_I2C3_CONFIG(PeriphClkInit->I2c3ClockSelection);
   }
-#endif /* I2C3 */
+#endif
 
 #if defined(USB)
   /*-------------------------- USB clock source configuration ----------------------*/
@@ -336,20 +340,20 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
       __HAL_RCC_PLLCLKOUT_ENABLE(RCC_PLL_USBCLK);
     }
 #if defined(SAI1)
-    if (PeriphClkInit->UsbClockSelection == RCC_USBCLKSOURCE_PLLSAI1)
-    {
-      /* PLLSAI1 parameters N & Q configuration and clock output (PLLSAI1ClockOut) */
-      ret = RCCEx_PLLSAI1_ConfigNQ(&(PeriphClkInit->PLLSAI1));
+  if (PeriphClkInit->UsbClockSelection == RCC_USBCLKSOURCE_PLLSAI1)
+  {
+    /* PLLSAI1 parameters N & Q configuration and clock output (PLLSAI1ClockOut) */
+    ret = RCCEx_PLLSAI1_ConfigNQ(&(PeriphClkInit->PLLSAI1));
 
-      if (ret != HAL_OK)
-      {
-        /* set overall return value */
-        status = ret;
-      }
+    if (ret != HAL_OK)
+    {
+      /* set overall return value */
+      status = ret;
     }
-#endif /* SAI1 */
   }
-#endif /* USB */
+#endif
+  }
+#endif
 
   /*-------------------------- RNG clock source configuration ----------------------*/
   if (((PeriphClkInit->PeriphClockSelection) & RCC_PERIPHCLK_RNG) == (RCC_PERIPHCLK_RNG))
@@ -383,18 +387,18 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
     }
 
 #if defined(SAI1)
-    if (PeriphClkInit->AdcClockSelection == RCC_ADCCLKSOURCE_PLLSAI1)
-    {
-      /* PLLSAI1 parameters N & R configuration and clock output (PLLSAI1ClockOut) */
-      ret = RCCEx_PLLSAI1_ConfigNR(&(PeriphClkInit->PLLSAI1));
+  if (PeriphClkInit->AdcClockSelection == RCC_ADCCLKSOURCE_PLLSAI1)
+  {
+    /* PLLSAI1 parameters N & R configuration and clock output (PLLSAI1ClockOut) */
+    ret = RCCEx_PLLSAI1_ConfigNR(&(PeriphClkInit->PLLSAI1));
 
-      if (ret != HAL_OK)
-      {
-        /* set overall return value */
-        status = ret;
-      }
+    if (ret != HAL_OK)
+    {
+      /* set overall return value */
+      status = ret;
     }
-#endif /* SAI1 */
+  }
+#endif
   }
 
   /*-------------------------- RFWKP clock source configuration ----------------------*/
@@ -422,7 +426,8 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
     /* Configure the SMPS interface clock source */
     __HAL_RCC_SMPS_CONFIG(PeriphClkInit->SmpsClockSelection);
   }
-#endif /* RCC_SMPS_SUPPORT */
+#endif
+
 
   return status;
 }
@@ -446,23 +451,23 @@ void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
                                         RCC_PERIPHCLK_RTC    | RCC_PERIPHCLK_RFWAKEUP;
 #if defined(LPUART1)
   PeriphClkInit->PeriphClockSelection |= RCC_PERIPHCLK_LPUART1;
-#endif /* LPUART1 */
+#endif
 
 #if defined(I2C3)
   PeriphClkInit->PeriphClockSelection |= RCC_PERIPHCLK_I2C3;
-#endif /* I2C3 */
+#endif
 
 #if defined(SAI1)
   PeriphClkInit->PeriphClockSelection |= RCC_PERIPHCLK_SAI1;
-#endif /* SAI1 */
+#endif
 
 #if defined(USB)
   PeriphClkInit->PeriphClockSelection |= RCC_PERIPHCLK_USB;
-#endif /* USB */
+#endif
 
 #if defined(RCC_SMPS_SUPPORT)
   PeriphClkInit->PeriphClockSelection |= RCC_PERIPHCLK_SMPS;
-#endif /* RCC_SMPS_SUPPORT */
+#endif
 
 
 #if defined(SAI1)
@@ -471,7 +476,7 @@ void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
   PeriphClkInit->PLLSAI1.PLLP = LL_RCC_PLLSAI1_GetP();
   PeriphClkInit->PLLSAI1.PLLR = LL_RCC_PLLSAI1_GetR();
   PeriphClkInit->PLLSAI1.PLLQ = LL_RCC_PLLSAI1_GetQ();
-#endif /* SAI1 */
+#endif
 
   /* Get the USART1 clock source ---------------------------------------------*/
   PeriphClkInit->Usart1ClockSelection   = __HAL_RCC_GET_USART1_SOURCE();
@@ -479,7 +484,7 @@ void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
 #if defined(LPUART1)
   /* Get the LPUART1 clock source --------------------------------------------*/
   PeriphClkInit->Lpuart1ClockSelection  = __HAL_RCC_GET_LPUART1_SOURCE();
-#endif /* LPUART1 */
+#endif
 
   /* Get the I2C1 clock source -----------------------------------------------*/
   PeriphClkInit->I2c1ClockSelection     = __HAL_RCC_GET_I2C1_SOURCE();
@@ -487,7 +492,7 @@ void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
 #if defined(I2C3)
   /* Get the I2C3 clock source -----------------------------------------------*/
   PeriphClkInit->I2c3ClockSelection     = __HAL_RCC_GET_I2C3_SOURCE();
-#endif /* I2C3 */
+#endif
 
   /* Get the LPTIM1 clock source ---------------------------------------------*/
   PeriphClkInit->Lptim1ClockSelection   = __HAL_RCC_GET_LPTIM1_SOURCE();
@@ -498,7 +503,7 @@ void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
 #if defined(SAI1)
   /* Get the SAI1 clock source -----------------------------------------------*/
   PeriphClkInit->Sai1ClockSelection     = __HAL_RCC_GET_SAI1_SOURCE();
-#endif /* SAI1 */
+#endif
 
   /* Get the RTC clock source ------------------------------------------------*/
   PeriphClkInit->RTCClockSelection      = __HAL_RCC_GET_RTC_SOURCE();
@@ -506,7 +511,7 @@ void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
 #if defined(USB)
   /* Get the USB clock source ------------------------------------------------*/
   PeriphClkInit->UsbClockSelection      = __HAL_RCC_GET_USB_SOURCE();
-#endif /* USB */
+#endif
 
   /* Get the RNG clock source ------------------------------------------------*/
   PeriphClkInit->RngClockSelection      = HAL_RCCEx_GetRngCLKSource();
@@ -523,7 +528,7 @@ void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
 
   /* Get the SMPS clock source -----------------------------------------------*/
   PeriphClkInit->SmpsClockSelection     = __HAL_RCC_GET_SMPS_SOURCE();
-#endif /* RCC_SMPS_SUPPORT */
+#endif
 
 }
 
@@ -553,7 +558,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
 #if defined(RCC_SMPS_SUPPORT)
   uint32_t smps_prescaler_index = ((LL_RCC_GetSMPSPrescaler()) >> RCC_SMPSCR_SMPSDIV_Pos);
-#endif /* RCC_SMPS_SUPPORT */
+#endif
 
   /* Check the parameters */
   assert_param(IS_RCC_PERIPHCLOCK(PeriphClk));
@@ -600,45 +605,47 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
   {
     switch (LL_RCC_GetSAIClockSource(LL_RCC_SAI1_CLKSOURCE))
     {
-      case LL_RCC_SAI1_CLKSOURCE_HSI:        /* HSI clock used as SAI1 clock source */
-        if (LL_RCC_HSI_IsReady() == 1U)
-        {
-          frequency = HSI_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_SAI1_CLKSOURCE_HSI:        /* HSI clock used as SAI1 clock source */
+      if (LL_RCC_HSI_IsReady() == 1U)
+      {
+        frequency = HSI_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      case LL_RCC_SAI1_CLKSOURCE_PLLSAI1:    /* PLLSAI1 clock used as SAI1 clock source */
-        if (LL_RCC_PLLSAI1_IsReady() == 1U)
-        {
-          frequency = RCC_PLLSAI1_GetFreqDomain_P();
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+#if defined(SAI1)
+    case LL_RCC_SAI1_CLKSOURCE_PLLSAI1:    /* PLLSAI1 clock used as SAI1 clock source */
+      if (LL_RCC_PLLSAI1_IsReady() == 1U)
+      {
+        frequency = RCC_PLLSAI1_GetFreqDomain_P();
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
+#endif
 
-      case LL_RCC_SAI1_CLKSOURCE_PLL:        /* PLL clock used as SAI1 clock source */
-        if (LL_RCC_PLL_IsReady() == 1U)
-        {
-          frequency = RCC_PLL_GetFreqDomain_P();
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_SAI1_CLKSOURCE_PLL:        /* PLL clock used as SAI1 clock source */
+      if (LL_RCC_PLL_IsReady() == 1U)
+      {
+        frequency = RCC_PLL_GetFreqDomain_P();
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      default: /* External input clock used as SAI1 clock source */
-        frequency = EXTERNAL_SAI1_CLOCK_VALUE;
-        break;
+    default: /* External input clock used as SAI1 clock source */
+      frequency = EXTERNAL_SAI1_CLOCK_VALUE;
+      break;
     }
   }
-#endif /* SAI1 */
+#endif
   else if (PeriphClk == RCC_PERIPHCLK_RNG)
   {
     uint32_t rngClockSource = HAL_RCCEx_GetRngCLKSource();
@@ -689,19 +696,6 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
         /* Nothing to do as frequency already initialized to 0U */
       }
     }
-#if defined(SAI1)
-    else if (rngClockSource == RCC_RNGCLKSOURCE_PLLSAI1)    /* PLLSAI1 clock used as SAI1 clock source */
-    {
-      if (LL_RCC_PLLSAI1_IsReady() == 1U)
-      {
-        frequency = RCC_PLLSAI1_GetFreqDomain_Q();
-      }
-      else
-      {
-        /* Nothing to do as frequency already initialized to 0U */
-      }
-    }
-#endif /* SAI1 */
     else                                                    /* HSI48 clock divided by 3 used as RNG clock source */
     {
 #if defined(RCC_HSI48_SUPPORT)
@@ -715,7 +709,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
       }
 #else
       /* Nothing to do as frequency already initialized to 0U */
-#endif /* RCC_HSI48_SUPPORT */
+#endif
     }
   }
 #if defined(USB)
@@ -724,88 +718,87 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
     switch (LL_RCC_GetUSBClockSource(LL_RCC_USB_CLKSOURCE))
     {
 #if defined(SAI1)
-      case LL_RCC_USB_CLKSOURCE_PLLSAI1:       /* PLLSAI1 clock used as USB clock source */
-        if (LL_RCC_PLLSAI1_IsReady() == 1U)
-        {
-          frequency = RCC_PLLSAI1_GetFreqDomain_Q();
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
-#endif /* SAI1 */
+    case LL_RCC_USB_CLKSOURCE_PLLSAI1:       /* PLLSAI1 clock used as USB clock source */
+      if (LL_RCC_PLLSAI1_IsReady() == 1U)
+      {
+        frequency = RCC_PLLSAI1_GetFreqDomain_Q();
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
+#endif
 
-      case LL_RCC_USB_CLKSOURCE_PLL:           /* PLL clock used as USB clock source */
-        if (LL_RCC_PLL_IsReady() == 1U)
-        {
-          frequency = RCC_PLL_GetFreqDomain_Q();
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_USB_CLKSOURCE_PLL:           /* PLL clock used as USB clock source */
+      if (LL_RCC_PLL_IsReady() == 1U)
+      {
+        frequency = RCC_PLL_GetFreqDomain_Q();
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      case LL_RCC_USB_CLKSOURCE_MSI:           /* MSI clock used as USB clock source */
-        if (LL_RCC_MSI_IsReady() == 1U)
-        {
-          frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSI_GetRange());
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_USB_CLKSOURCE_MSI:           /* MSI clock used as USB clock source */
+      if (LL_RCC_MSI_IsReady() == 1U)
+      {
+        frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSI_GetRange());
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      default: /* HSI48 clock used as USB clock source */
-        if (LL_RCC_HSI48_IsReady() == 1U)
-        {
-          frequency = HSI48_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    default: /* HSI48 clock used as USB clock source */
+      if (LL_RCC_HSI48_IsReady() == 1U)
+      {
+        frequency = HSI48_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
     }
   }
-#endif /* USB */
+#endif
   else if (PeriphClk == RCC_PERIPHCLK_USART1)
   {
     switch (LL_RCC_GetUSARTClockSource(LL_RCC_USART1_CLKSOURCE))
     {
-      case LL_RCC_USART1_CLKSOURCE_SYSCLK: /* USART1 Clock is System Clock */
-        frequency = HAL_RCC_GetSysClockFreq();
-        break;
+    case LL_RCC_USART1_CLKSOURCE_SYSCLK: /* USART1 Clock is System Clock */
+      frequency = HAL_RCC_GetSysClockFreq();
+      break;
 
-      case LL_RCC_USART1_CLKSOURCE_HSI:    /* USART1 Clock is HSI Osc. */
-        if (LL_RCC_HSI_IsReady() == 1U)
-        {
-          frequency = HSI_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_USART1_CLKSOURCE_HSI:    /* USART1 Clock is HSI Osc. */
+      if (LL_RCC_HSI_IsReady() == 1U)
+      {
+        frequency = HSI_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      case LL_RCC_USART1_CLKSOURCE_LSE:    /* USART1 Clock is LSE Osc. */
-        if (LL_RCC_LSE_IsReady() == 1U)
-        {
-          frequency = LSE_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_USART1_CLKSOURCE_LSE:    /* USART1 Clock is LSE Osc. */
+      if (LL_RCC_LSE_IsReady() == 1U)
+      {
+        frequency = LSE_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      default: /* USART1 Clock is PCLK2 */
-        frequency = __LL_RCC_CALC_PCLK2_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(),
-                                                                      LL_RCC_GetAHBPrescaler()),
-                                             LL_RCC_GetAPB2Prescaler());
-        break;
+    default: /* USART1 Clock is PCLK2 */
+      frequency = __LL_RCC_CALC_PCLK2_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB2Prescaler());
+      break;
     }
   }
 #if defined(LPUART1)
@@ -813,109 +806,107 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
   {
     switch (LL_RCC_GetLPUARTClockSource(LL_RCC_LPUART1_CLKSOURCE))
     {
-      case LL_RCC_LPUART1_CLKSOURCE_SYSCLK: /* LPUART1 Clock is System Clock */
-        frequency = HAL_RCC_GetSysClockFreq();
-        break;
+    case LL_RCC_LPUART1_CLKSOURCE_SYSCLK: /* LPUART1 Clock is System Clock */
+      frequency = HAL_RCC_GetSysClockFreq();
+      break;
 
-      case LL_RCC_LPUART1_CLKSOURCE_HSI:    /* LPUART1 Clock is HSI Osc. */
-        if (LL_RCC_HSI_IsReady() == 1U)
-        {
-          frequency = HSI_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_LPUART1_CLKSOURCE_HSI:    /* LPUART1 Clock is HSI Osc. */
+      if (LL_RCC_HSI_IsReady() == 1U)
+      {
+        frequency = HSI_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      case LL_RCC_LPUART1_CLKSOURCE_LSE:    /* LPUART1 Clock is LSE Osc. */
-        if (LL_RCC_LSE_IsReady() == 1U)
-        {
-          frequency = LSE_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_LPUART1_CLKSOURCE_LSE:    /* LPUART1 Clock is LSE Osc. */
+      if (LL_RCC_LSE_IsReady() == 1U)
+      {
+        frequency = LSE_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      default: /* LPUART1 Clock is PCLK1 */
-        frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(),
-                                                                      LL_RCC_GetAHBPrescaler()),
-                                             LL_RCC_GetAPB1Prescaler());
-        break;
+    default: /* LPUART1 Clock is PCLK1 */
+      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
+      break;
     }
   }
-#endif /* LPUART1 */
+#endif
   else if (PeriphClk == RCC_PERIPHCLK_ADC)
   {
     switch (LL_RCC_GetADCClockSource(LL_RCC_ADC_CLKSOURCE))
     {
 #if defined(STM32WB55xx) || defined (STM32WB5Mxx) || defined(STM32WB35xx)
-      case LL_RCC_ADC_CLKSOURCE_PLLSAI1:       /* PLLSAI1 clock used as ADC clock source */
-        if (LL_RCC_PLLSAI1_IsReady() == 1U)
-        {
-          frequency = RCC_PLLSAI1_GetFreqDomain_R();
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
-#elif defined(STM32WB15xx) || defined(STM32WB1Mxx)
-      case LL_RCC_ADC_CLKSOURCE_HSI:           /* HSI clock used as ADC clock source */
-        if (LL_RCC_HSI_IsReady() == 1U)
-        {
-          frequency = HSI_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
-#endif /* STM32WB55xx || STM32WB5Mxx || STM32WB35xx */
-      case LL_RCC_ADC_CLKSOURCE_SYSCLK:        /* SYSCLK clock used as ADC clock source */
-        frequency = HAL_RCC_GetSysClockFreq();
-        break;
-      case LL_RCC_ADC_CLKSOURCE_PLL:           /* PLL clock used as ADC clock source */
-        if (LL_RCC_PLL_IsReady() == 1U)
-        {
-          frequency = RCC_PLL_GetFreqDomain_P();
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_ADC_CLKSOURCE_PLLSAI1:       /* PLLSAI1 clock used as ADC clock source */
+      if (LL_RCC_PLLSAI1_IsReady() == 1U)
+      {
+        frequency = RCC_PLLSAI1_GetFreqDomain_R();
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
+#elif defined(STM32WB15xx)
+    case LL_RCC_ADC_CLKSOURCE_HSI:           /* HSI clock used as ADC clock source */
+      if (LL_RCC_HSI_IsReady() == 1U)
+      {
+        frequency = HSI_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
+#endif
+    case LL_RCC_ADC_CLKSOURCE_SYSCLK:        /* SYSCLK clock used as ADC clock source */
+      frequency = HAL_RCC_GetSysClockFreq();
+      break;
+    case LL_RCC_ADC_CLKSOURCE_PLL:           /* PLL clock used as ADC clock source */
+      if (LL_RCC_PLL_IsReady() == 1U)
+      {
+        frequency = RCC_PLL_GetFreqDomain_P();
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      default: /* No clock used as ADC clock source */
-        break;
+    default: /* No clock used as ADC clock source */
+      break;
     }
   }
   else if (PeriphClk == RCC_PERIPHCLK_I2C1)
   {
     switch (LL_RCC_GetI2CClockSource(LL_RCC_I2C1_CLKSOURCE))
     {
-      case LL_RCC_I2C1_CLKSOURCE_SYSCLK: /* I2C1 Clock is System Clock */
-        frequency = HAL_RCC_GetSysClockFreq();
-        break;
+    case LL_RCC_I2C1_CLKSOURCE_SYSCLK: /* I2C1 Clock is System Clock */
+      frequency = HAL_RCC_GetSysClockFreq();
+      break;
 
-      case LL_RCC_I2C1_CLKSOURCE_HSI:    /* I2C1 Clock is HSI Osc. */
-        if (LL_RCC_HSI_IsReady() == 1U)
-        {
-          frequency = HSI_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_I2C1_CLKSOURCE_HSI:    /* I2C1 Clock is HSI Osc. */
+      if (LL_RCC_HSI_IsReady() == 1U)
+      {
+        frequency = HSI_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      default: /* I2C1 Clock is PCLK1 */
-        frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(),
-                                                                      LL_RCC_GetAHBPrescaler()),
-                                             LL_RCC_GetAPB1Prescaler());
-        break;
+    default: /* I2C1 Clock is PCLK1 */
+      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
+      break;
     }
   }
 #if defined(I2C3)
@@ -923,29 +914,28 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
   {
     switch (LL_RCC_GetI2CClockSource(LL_RCC_I2C3_CLKSOURCE))
     {
-      case LL_RCC_I2C3_CLKSOURCE_SYSCLK: /* I2C3 Clock is System Clock */
-        frequency = HAL_RCC_GetSysClockFreq();
-        break;
+    case LL_RCC_I2C3_CLKSOURCE_SYSCLK: /* I2C3 Clock is System Clock */
+      frequency = HAL_RCC_GetSysClockFreq();
+      break;
 
-      case LL_RCC_I2C3_CLKSOURCE_HSI: /* I2C3 Clock is HSI Osc. */
-        if (LL_RCC_HSI_IsReady() == 1U)
-        {
-          frequency = HSI_VALUE;
-        }
-        else
-        {
-          /* Nothing to do as frequency already initialized to 0U */
-        }
-        break;
+    case LL_RCC_I2C3_CLKSOURCE_HSI: /* I2C3 Clock is HSI Osc. */
+      if (LL_RCC_HSI_IsReady() == 1U)
+      {
+        frequency = HSI_VALUE;
+      }
+      else
+      {
+        /* Nothing to do as frequency already initialized to 0U */
+      }
+      break;
 
-      default: /* I2C3 Clock is PCLK1 */
-        frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(),
-                                                                      LL_RCC_GetAHBPrescaler()),
-                                             LL_RCC_GetAPB1Prescaler());
-        break;
+    default: /* I2C3 Clock is PCLK1 */
+      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
+      break;
     }
   }
-#endif /* I2C3 */
+#endif
   else if (PeriphClk == RCC_PERIPHCLK_LPTIM1)
   {
     uint32_t lptimClockSource = LL_RCC_GetLPTIMClockSource(LL_RCC_LPTIM1_CLKSOURCE);
@@ -987,9 +977,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
     }
     else /* LPTIM1 Clock is PCLK1 */
     {
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(),
-                                                                    LL_RCC_GetAHBPrescaler()),
-                                           LL_RCC_GetAPB1Prescaler());
+      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
     }
   }
   else if (PeriphClk == RCC_PERIPHCLK_LPTIM2)
@@ -1033,9 +1021,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
     }
     else /* LPTIM2 Clock is PCLK1 */
     {
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(),
-                                                                    LL_RCC_GetAHBPrescaler()),
-                                           LL_RCC_GetAPB1Prescaler());
+      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
     }
   }
   else if (PeriphClk == RCC_PERIPHCLK_RFWAKEUP)
@@ -1095,20 +1081,20 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
     {
       switch (LL_RCC_MSI_GetRange())
       {
-        case LL_RCC_MSIRANGE_8:
-          frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSIRANGE_8) / SmpsPrescalerTable[smps_prescaler_index][4];
-          break;
-        case LL_RCC_MSIRANGE_9:
-          frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSIRANGE_9) / SmpsPrescalerTable[smps_prescaler_index][3];
-          break;
-        case LL_RCC_MSIRANGE_10:
-          frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSIRANGE_10) / SmpsPrescalerTable[smps_prescaler_index][2];
-          break;
-        case LL_RCC_MSIRANGE_11:
-          frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSIRANGE_11) / SmpsPrescalerTable[smps_prescaler_index][1];
-          break;
-        default:
-          break;
+      case LL_RCC_MSIRANGE_8:
+        frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSIRANGE_8) / SmpsPrescalerTable[smps_prescaler_index][4];
+        break;
+      case LL_RCC_MSIRANGE_9:
+        frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSIRANGE_9) / SmpsPrescalerTable[smps_prescaler_index][3];
+        break;
+      case LL_RCC_MSIRANGE_10:
+        frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSIRANGE_10) / SmpsPrescalerTable[smps_prescaler_index][2];
+        break;
+      case LL_RCC_MSIRANGE_11:
+        frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSIRANGE_11) / SmpsPrescalerTable[smps_prescaler_index][1];
+        break;
+      default:
+        break;
       }
       frequency = frequency >> 1U; /* Systematic Div by 2 */
     }
@@ -1117,8 +1103,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
       /* Nothing to do as frequency already initialized to 0U */
     }
   }
-#endif /* RCC_SMPS_SUPPORT */
-
+#endif
   return (frequency);
 }
 
@@ -1126,14 +1111,10 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
   * @brief  Return the RNG clock source
   * @retval The RNG clock source can be one of the following values:
   *            @arg @ref RCC_RNGCLKSOURCE_HSI48 HSI48 clock divided by 3 selected as RNG clock
-  *            @arg @ref RCC_RNGCLKSOURCE_PLL      PLL "Q" clock divided by 3  selected as RNG clock
-  *            @arg @ref RCC_RNGCLKSOURCE_MSI      MSI clock divided by 3 selected as RNG clock
-  *            @arg @ref RCC_RNGCLKSOURCE_PLLSAI1  PLLSAI1 "Q" clock selected as RNG clock (*)
-  *            @arg @ref RCC_RNGCLKSOURCE_LSI      LSI clock selected as RNG clock
-  *            @arg @ref RCC_RNGCLKSOURCE_LSE      LSE clock selected as RNG clock
-  *
-  *         (*) Value not defined in all devices.
-  *
+  *            @arg @ref RCC_RNGCLKSOURCE_PLL   PLL "Q" clock divided by 3  selected as RNG clock
+  *            @arg @ref RCC_RNGCLKSOURCE_MSI   MSI clock divided by 3 selected as RNG clock
+  *            @arg @ref RCC_RNGCLKSOURCE_LSI   LSI clock selected as RNG clock
+  *            @arg @ref RCC_RNGCLKSOURCE_LSE   LSE clock selected as RNG clock
   */
 uint32_t HAL_RCCEx_GetRngCLKSource(void)
 {
@@ -1155,8 +1136,8 @@ uint32_t HAL_RCCEx_GetRngCLKSource(void)
   */
 
 /** @defgroup RCCEx_Exported_Functions_Group2 Extended Clock management functions
-  * @brief  Extended Clock management functions
-  *
+ *  @brief  Extended Clock management functions
+ *
 @verbatim
  ===============================================================================
                 ##### Extended clock management functions  #####
@@ -1262,7 +1243,7 @@ HAL_StatusTypeDef HAL_RCCEx_DisablePLLSAI1(void)
 
   return status;
 }
-#endif /* SAI1 */
+#endif
 
 /***********************************************************************************************/
 
@@ -1324,6 +1305,8 @@ void HAL_RCCEx_EnableLSECSS_IT(void)
   /* Enable IT on EXTI Line 18 */
   __HAL_RCC_LSECSS_EXTI_ENABLE_IT();
   __HAL_RCC_LSECSS_EXTI_ENABLE_RISING_EDGE();
+
+
 }
 
 /**
@@ -1387,16 +1370,17 @@ void HAL_RCCEx_LSCOConfig(uint32_t RCC_LSCOx, uint32_t RCC_LSCOSource)
   {
     /* LSCO1 Clock Enable */
     __LSCO1_CLK_ENABLE();
-    /* Configure the LSCO1 pin in alternate function mode */
+    /* Configue the LSCO1 pin in alternate function mode */
     GPIO_InitStruct.Pin       = LSCO1_PIN;
     GPIO_InitStruct.Alternate = GPIO_AF0_LSCO;
     HAL_GPIO_Init(LSCO1_GPIO_PORT, &GPIO_InitStruct);
+
   }
   else if (RCC_LSCOx == RCC_LSCO2)
   {
     /* LSCO2 Clock Enable */
     __LSCO2_CLK_ENABLE();
-    /* Configure the LSCO2 pin in alternate function mode */
+    /* Configue the LSCO2 pin in alternate function mode */
     GPIO_InitStruct.Pin       = LSCO2_PIN;
     GPIO_InitStruct.Alternate = GPIO_AF0_LSCO;
     HAL_GPIO_Init(LSCO2_GPIO_PORT, &GPIO_InitStruct);
@@ -1407,12 +1391,12 @@ void HAL_RCCEx_LSCOConfig(uint32_t RCC_LSCOx, uint32_t RCC_LSCOSource)
   {
     /* LSCO3 Clock Enable */
     __LSCO3_CLK_ENABLE();
-    /* Configure the LSCO3 pin in alternate function mode */
+    /* Configue the LSCO3 pin in alternate function mode */
     GPIO_InitStruct.Pin       = LSCO3_PIN;
     GPIO_InitStruct.Alternate = GPIO_AF6_LSCO;
     HAL_GPIO_Init(LSCO3_GPIO_PORT, &GPIO_InitStruct);
   }
-#endif /* RCC_LSCO3_SUPPORT */
+#endif
   else
   {
     ;
@@ -1438,6 +1422,8 @@ void HAL_RCCEx_LSCOConfig(uint32_t RCC_LSCOx, uint32_t RCC_LSCOSource)
 
 }
 
+
+
 /**
   * @brief  Select the Low Speed clock source to output on LSCO pin (PA2).
   * @param  LSCOSource  specifies the Low Speed clock source to output.
@@ -1448,11 +1434,40 @@ void HAL_RCCEx_LSCOConfig(uint32_t RCC_LSCOx, uint32_t RCC_LSCOSource)
   */
 void HAL_RCCEx_EnableLSCO(uint32_t LSCOSource)
 {
+  GPIO_InitTypeDef GPIO_InitStruct;
+  FlagStatus backupchanged;
+
   /* Check the parameters */
   assert_param(IS_RCC_LSCOSOURCE(LSCOSource));
 
-  /* Update LSCO selection according to parameter and enable LSCO */
-  MODIFY_REG(RCC->BDCR, RCC_BDCR_LSCOSEL, LSCOSource | RCC_BDCR_LSCOEN);
+  /* LSCO Pin Clock Enable */
+  __LSCO1_CLK_ENABLE();
+
+  /* Configure the LSCO pin in analog mode */
+  GPIO_InitStruct.Pin   = LSCO1_PIN;
+  GPIO_InitStruct.Mode  = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Pull  = GPIO_NOPULL;
+  GPIO_InitStruct.Alternate = GPIO_AF0_LSCO;
+  HAL_GPIO_Init(LSCO1_GPIO_PORT, &GPIO_InitStruct);
+
+  /* Update LSCOSEL clock source in Backup Domain control register */
+  if (HAL_IS_BIT_CLR(PWR->CR1, PWR_CR1_DBP))
+  {
+    HAL_PWR_EnableBkUpAccess();
+    backupchanged = SET;
+  }
+  else
+  {
+    backupchanged = RESET;
+  }
+
+  MODIFY_REG(RCC->BDCR, RCC_BDCR_LSCOSEL | RCC_BDCR_LSCOEN, LSCOSource | RCC_BDCR_LSCOEN);
+
+  if (backupchanged == SET)
+  {
+    HAL_PWR_DisableBkUpAccess();
+  }
 }
 
 /**
@@ -1461,7 +1476,27 @@ void HAL_RCCEx_EnableLSCO(uint32_t LSCOSource)
   */
 void HAL_RCCEx_DisableLSCO(void)
 {
+  FlagStatus backupchanged;
+
+  if (HAL_IS_BIT_CLR(PWR->CR1, PWR_CR1_DBP))
+  {
+    /* Enable access to the backup domain */
+    HAL_PWR_EnableBkUpAccess();
+    backupchanged = SET;
+  }
+  else
+  {
+    backupchanged = RESET;
+  }
+
   LL_RCC_LSCO_Disable();
+
+  /* Restore previous configuration */
+  if (backupchanged == SET)
+  {
+    /* Disable access to the backup domain */
+    HAL_PWR_DisableBkUpAccess();
+  }
 }
 
 /**
@@ -1523,20 +1558,21 @@ HAL_StatusTypeDef HAL_RCCEx_TrimOsc(uint32_t OscillatorType)
   return status;
 }
 
+
 /**
   * @}
   */
 
 #if defined(CRS)
 /** @defgroup RCCEx_Exported_Functions_Group3 Extended Clock Recovery System Control functions
-  *  @brief  Extended Clock Recovery System Control functions
-  *
+ *  @brief  Extended Clock Recovery System Control functions
+ *
 @verbatim
  ===============================================================================
                 ##### Extended Clock Recovery System Control functions  #####
  ===============================================================================
     [..]
-      For devices with Clock Recovery System feature (CRS), RCC Extended HAL driver can be used as follows:
+      For devices with Clock Recovery System feature (CRS), RCC Extention HAL driver can be used as follows:
 
       (#) In System clock config, HSI48 needs to be enabled
 
@@ -1547,7 +1583,7 @@ HAL_StatusTypeDef HAL_RCCEx_TrimOsc(uint32_t OscillatorType)
               (+++) Default values can be set for frequency Error Measurement (reload and error limit)
                         and also HSI48 oscillator smooth trimming.
               (+++) Macro __HAL_RCC_CRS_RELOADVALUE_CALCULATE can be also used to calculate
-                        directly reload value with target and synchronization frequencies values
+                        directly reload value with target and sychronization frequencies values
           (##) Call function HAL_RCCEx_CRSConfig which
               (+++) Resets CRS registers to their default values.
               (+++) Configures CRS registers with synchronization configuration
@@ -1589,8 +1625,8 @@ HAL_StatusTypeDef HAL_RCCEx_TrimOsc(uint32_t OscillatorType)
           This function can be called before calling HAL_RCCEx_CRSConfig (for instance in Systick handler)
 
 @endverbatim
-  * @{
-  */
+ * @{
+ */
 
 /**
   * @brief  Start automatic synchronization for polling mode
@@ -1668,20 +1704,20 @@ void HAL_RCCEx_CRSGetSynchronizationInfo(RCC_CRSSynchroInfoTypeDef *pSynchroInfo
 }
 
 /**
-  * @brief  Wait for CRS Synchronization status.
-  * @param  Timeout  Duration of the timeout
-  * @note   Timeout is based on the maximum time to receive a SYNC event based on synchronization
-  *         frequency.
-  * @note   If Timeout set to HAL_MAX_DELAY, HAL_TIMEOUT will be never returned.
-  * @retval Combination of Synchronization status
-  *          This parameter can be a combination of the following values:
-  *            @arg @ref RCC_CRS_TIMEOUT
-  *            @arg @ref RCC_CRS_SYNCOK
-  *            @arg @ref RCC_CRS_SYNCWARN
-  *            @arg @ref RCC_CRS_SYNCERR
-  *            @arg @ref RCC_CRS_SYNCMISS
-  *            @arg @ref RCC_CRS_TRIMOVF
-  */
+* @brief  Wait for CRS Synchronization status.
+* @param  Timeout  Duration of the timeout
+* @note   Timeout is based on the maximum time to receive a SYNC event based on synchronization
+*         frequency.
+* @note   If Timeout set to HAL_MAX_DELAY, HAL_TIMEOUT will be never returned.
+* @retval Combination of Synchronization status
+*          This parameter can be a combination of the following values:
+*            @arg @ref RCC_CRS_TIMEOUT
+*            @arg @ref RCC_CRS_SYNCOK
+*            @arg @ref RCC_CRS_SYNCWARN
+*            @arg @ref RCC_CRS_SYNCERR
+*            @arg @ref RCC_CRS_SYNCMISS
+*            @arg @ref RCC_CRS_TRIMOVF
+*/
 uint32_t HAL_RCCEx_CRSWaitSynchronization(uint32_t Timeout)
 {
   uint32_t crsstatus = RCC_CRS_NONE;
@@ -1756,7 +1792,8 @@ uint32_t HAL_RCCEx_CRSWaitSynchronization(uint32_t Timeout)
       /* frequency error counter reached a zero value */
       __HAL_RCC_CRS_CLEAR_FLAG(RCC_CRS_FLAG_ESYNC);
     }
-  } while (RCC_CRS_NONE == crsstatus);
+  }
+  while (RCC_CRS_NONE == crsstatus);
 
   return crsstatus;
 }
@@ -1881,15 +1918,15 @@ __weak void HAL_RCCEx_CRS_ErrorCallback(uint32_t Error)
 /**
   * @}
   */
-#endif /* CRS */
+#endif
 
 /**
   * @}
   */
 
 /** @addtogroup RCCEx_Private_Functions
-  * @{
-  */
+ * @{
+ */
 
 #if defined(SAI1)
 /**
@@ -2096,7 +2133,7 @@ static HAL_StatusTypeDef RCCEx_PLLSAI1_ConfigNR(RCC_PLLSAI1InitTypeDef *PLLSAI1)
 
   return status;
 }
-#endif /* SAI1 */
+#endif
 
 /**
   * @brief  Return PLL clock (PLLPCLK) frequency used for SAI domain
@@ -2104,8 +2141,7 @@ static HAL_StatusTypeDef RCCEx_PLLSAI1_ConfigNR(RCC_PLLSAI1InitTypeDef *PLLSAI1)
   */
 static uint32_t RCC_PLL_GetFreqDomain_P(void)
 {
-  uint32_t pllinputfreq;
-  uint32_t pllsource;
+  uint32_t pllinputfreq, pllsource;
 
   /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI Value / PLLM) * PLLN
      SAI Domain clock = PLL_VCO / PLLP
@@ -2141,14 +2177,14 @@ static uint32_t RCC_PLL_GetFreqDomain_P(void)
                                        LL_RCC_PLL_GetN(), LL_RCC_PLL_GetP());
 }
 
+
 /**
   * @brief  Return PLL clock (PLLQCLK) frequency used for 48 MHz domain
   * @retval PLLQCLK clock frequency (in Hz)
   */
 static uint32_t RCC_PLL_GetFreqDomain_Q(void)
 {
-  uint32_t pllinputfreq;
-  uint32_t pllsource;
+  uint32_t pllinputfreq, pllsource;
 
   /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI Value/ PLLM) * PLLN
      48M Domain clock = PLL_VCO / PLLQ
@@ -2192,8 +2228,7 @@ static uint32_t RCC_PLL_GetFreqDomain_Q(void)
   */
 static uint32_t RCC_PLLSAI1_GetFreqDomain_R(void)
 {
-  uint32_t pllinputfreq;
-  uint32_t pllsource;
+  uint32_t pllinputfreq, pllsource;
 
   /* PLLSAI1_VCO = (HSE_VALUE or HSI_VALUE or MSI Value/ PLLM) * PLLSAI1N */
   /* 48M Domain clock  = PLLSAI1_VCO / PLLSAI1R */
@@ -2234,8 +2269,7 @@ static uint32_t RCC_PLLSAI1_GetFreqDomain_R(void)
   */
 static uint32_t RCC_PLLSAI1_GetFreqDomain_P(void)
 {
-  uint32_t pllinputfreq;
-  uint32_t pllsource;
+  uint32_t pllinputfreq, pllsource;
 
   /* PLLSAI1_VCO = (HSE_VALUE or HSI_VALUE or MSI Value/ PLLM) * PLLSAI1N */
   /* SAI Domain clock  = PLLSAI1_VCO / PLLSAI1P */
@@ -2276,8 +2310,7 @@ static uint32_t RCC_PLLSAI1_GetFreqDomain_P(void)
   */
 static uint32_t RCC_PLLSAI1_GetFreqDomain_Q(void)
 {
-  uint32_t pllinputfreq;
-  uint32_t pllsource;
+  uint32_t pllinputfreq, pllsource;
 
   /* PLLSAI1_VCO = (HSE_VALUE or HSI_VALUE or MSI Value/ PLLM) * PLLSAI1N */
   /* 48M Domain clock  = PLLSAI1_VCO / PLLSAI1Q */
@@ -2311,14 +2344,12 @@ static uint32_t RCC_PLLSAI1_GetFreqDomain_Q(void)
   return __LL_RCC_CALC_PLLSAI1_48M_FREQ(pllinputfreq, LL_RCC_PLL_GetDivider(),
                                         LL_RCC_PLLSAI1_GetN(), LL_RCC_PLLSAI1_GetQ());
 }
-#endif /* SAI1 */
-
+#endif
 /**
   * @}
   */
 
 #endif /* HAL_RCC_MODULE_ENABLED */
-
 /**
   * @}
   */
@@ -2326,3 +2357,6 @@ static uint32_t RCC_PLLSAI1_GetFreqDomain_Q(void)
 /**
   * @}
   */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the 
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -266,7 +267,7 @@ typedef struct
   */
 /* Note: Literals values are defined from register SR2 bits SMPSF and SMPSBF  */
 /*       but they are also used as register CR5 bits SMPSEN and SMPSBEN,      */
-/*       as used by all SMPS operating mode functions targeting different    */
+/*       as used by all SMPS operating mode functions targetting different    */
 /*       registers:                                                           */
 /*       "LL_PWR_SMPS_SetMode()", "LL_PWR_SMPS_GetMode()"                     */
 /*       and "LL_PWR_SMPS_GetEffectiveMode()".                                */
@@ -426,7 +427,7 @@ typedef struct
 /** @defgroup PWR_PVM_Mode_Mask PWR PVM Mode Mask
   * @{
   */
-/* Note: On STM32WB series, power PVD event is not available on AIEC lines     */
+/* Note: On STM32WB serie, power PVD event is not available on AIEC lines     */
 /*       (only interruption is available through AIEC line 16).               */
 #define PVM_MODE_IT               (0x00010000U)  /*!< Mask for interruption yielded by PVM threshold crossing */
 #define PVM_MODE_EVT              (0x00020000U)  /*!< Mask for event yielded by PVM threshold crossing */
@@ -974,3 +975,4 @@ void              HAL_PWREx_PVM3Callback(void);
 
 #endif /* STM32WBxx_HAL_PWR_EX_H */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -7,17 +7,7 @@
   *          functionalities of the General Purpose Input/Output (EXTI) peripheral:
   *           + Initialization and de-initialization functions
   *           + IO operation functions
-  ******************************************************************************
-  * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
   @verbatim
   ==============================================================================
                     ##### EXTI Peripheral features #####
@@ -80,6 +70,17 @@
 
   @endverbatim
   ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
+  *
+  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -107,8 +108,8 @@
 /** @defgroup EXTI_Private_Constants EXTI Private Constants
   * @{
   */
-#define EXTI_MODE_OFFSET                    0x04u  /* 0x10: offset between CPU IMR/EMR registers */
-#define EXTI_CONFIG_OFFSET                  0x08u  /* 0x20: offset between CPU Rising/Falling configuration registers */
+#define EXTI_MODE_OFFSET                    0x04u   /* 0x10: offset between CPU IMR/EMR registers */
+#define EXTI_CONFIG_OFFSET                  0x08u   /* 0x20: offset between CPU Rising/Falling configuration registers */
 /**
   * @}
   */
@@ -123,8 +124,8 @@
   */
 
 /** @addtogroup EXTI_Exported_Functions_Group1
-  *  @brief    Configuration functions
-  *
+ *  @brief    Configuration functions
+ *
 @verbatim
  ===============================================================================
               ##### Configuration functions #####
@@ -223,7 +224,7 @@ HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   regaddr = (&EXTI->C2IMR1 + (EXTI_MODE_OFFSET * offset));
 #else
   regaddr = (&EXTI->IMR1 + (EXTI_MODE_OFFSET * offset));
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
   regval = *regaddr;
 
   /* Mask or set line */
@@ -244,7 +245,7 @@ HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   regaddr = (&EXTI->C2EMR1 + (EXTI_MODE_OFFSET * offset));
 #else
   regaddr = (&EXTI->EMR1 + (EXTI_MODE_OFFSET * offset));
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
   regval = *regaddr;
 
   /* Mask or set line */
@@ -289,7 +290,7 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   /* Check the parameter */
   assert_param(IS_EXTI_LINE(hexti->Line));
 
-  /* Store handle line number to configuration structure */
+  /* Store handle line number to configiguration structure */
   pExtiConfig->Line = hexti->Line;
 
   /* compute line register offset and line mask */
@@ -302,7 +303,7 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   regaddr = (&EXTI->C2IMR1 + (EXTI_MODE_OFFSET * offset));
 #else
   regaddr = (&EXTI->IMR1 + (EXTI_MODE_OFFSET * offset));
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
   regval = *regaddr;
 
   /* Check if selected line is enable */
@@ -320,7 +321,7 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
   regaddr = (&EXTI->C2EMR1 + (EXTI_MODE_OFFSET * offset));
 #else
   regaddr = (&EXTI->EMR1 + (EXTI_MODE_OFFSET * offset));
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
   regval = *regaddr;
 
   /* Check if selected line is enable */
@@ -359,7 +360,7 @@ HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigT
     if ((pExtiConfig->Line & EXTI_GPIO) == EXTI_GPIO)
     {
       regval = SYSCFG->EXTICR[linepos >> 2u];
-      pExtiConfig->GPIOSel = (regval >> (SYSCFG_EXTICR1_EXTI1_Pos * (linepos & 0x03u))) & SYSCFG_EXTICR1_EXTI0;
+      pExtiConfig->GPIOSel = ((regval << (SYSCFG_EXTICR1_EXTI1_Pos * (3uL - (linepos & 0x03u)))) >> 24u);
     }
   }
 
@@ -399,7 +400,7 @@ HAL_StatusTypeDef HAL_EXTI_ClearConfigLine(EXTI_HandleTypeDef *hexti)
   regaddr = (&EXTI->C2IMR1 + (EXTI_MODE_OFFSET * offset));
 #else
   regaddr = (&EXTI->IMR1 + (EXTI_MODE_OFFSET * offset));
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
   regval = (*regaddr & ~maskline);
   *regaddr = regval;
 
@@ -408,7 +409,7 @@ HAL_StatusTypeDef HAL_EXTI_ClearConfigLine(EXTI_HandleTypeDef *hexti)
   regaddr = (&EXTI->C2EMR1 + (EXTI_MODE_OFFSET * offset));
 #else
   regaddr = (&EXTI->EMR1 + (EXTI_MODE_OFFSET * offset));
-#endif /* DUAL_CORE && CORE_CM0PLUS */
+#endif
   regval = (*regaddr & ~maskline);
   *regaddr = regval;
 
@@ -495,8 +496,8 @@ HAL_StatusTypeDef HAL_EXTI_GetHandle(EXTI_HandleTypeDef *hexti, uint32_t ExtiLin
   */
 
 /** @addtogroup EXTI_Exported_Functions_Group2
-  *  @brief EXTI IO functions.
-  *
+ *  @brief EXTI IO functions.
+ *
 @verbatim
  ===============================================================================
                        ##### IO operation functions #####
@@ -647,3 +648,5 @@ void HAL_EXTI_GenerateSWI(EXTI_HandleTypeDef *hexti)
 /**
   * @}
   */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

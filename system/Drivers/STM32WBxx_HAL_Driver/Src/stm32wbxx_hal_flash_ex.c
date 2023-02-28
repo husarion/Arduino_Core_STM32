@@ -6,17 +6,7 @@
   *          This file provides firmware functions to manage the following
   *          functionalities of the FLASH extended peripheral:
   *           + Extended programming operations functions
-  ******************************************************************************
-  * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
  @verbatim
  ==============================================================================
                    ##### Flash Extended features #####
@@ -72,6 +62,17 @@
           HAL_FLASHEx_ForceFlashEmpty().
 
  @endverbatim
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
+  *
   ******************************************************************************
   */
 
@@ -288,7 +289,7 @@ HAL_StatusTypeDef HAL_FLASHEx_OBProgram(FLASH_OBProgramInitTypeDef *pOBInit)
   /* Option register */
   if ((pOBInit->OptionType & (OPTIONBYTE_RDP | OPTIONBYTE_USER)) == (OPTIONBYTE_RDP | OPTIONBYTE_USER))
   {
-    /* Fully modify OPTR register with RDP & user data */
+    /* Fully modify OPTR register with RDP & user datas */
     FLASH_OB_OptrConfig(pOBInit->UserType, pOBInit->UserConfig, pOBInit->RDPLevel);
   }
   else if ((pOBInit->OptionType & OPTIONBYTE_RDP) != 0U)
@@ -1050,3 +1051,5 @@ static HAL_StatusTypeDef FLASH_OB_ProceedWriteOperation(void)
 /**
   * @}
   */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

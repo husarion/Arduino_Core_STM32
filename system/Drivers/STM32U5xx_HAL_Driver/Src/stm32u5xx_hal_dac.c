@@ -10,17 +10,7 @@
   *           + Peripheral Control functions
   *           + Peripheral State and Errors functions
   *
-  ******************************************************************************
-  * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
   @verbatim
   ==============================================================================
                       ##### DAC Peripheral features #####
@@ -303,6 +293,16 @@
       (@) You can refer to the DAC HAL driver header file for more useful macros
 
 @endverbatim
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   ******************************************************************************
   */
 
