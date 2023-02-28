@@ -31,5 +31,6 @@
     "bw_swan_r5": "SWAN_R5",
     "disco_b_g431b_esc1": "B_G431B_ESC1",
     "disco_b_u585i_iot02a": "B_U585I_IOT02A",
-    "nucleo_wl55jc": "NUCLEO_WL55JC1"
+    "nucleo_wl55jc": "NUCLEO_WL55JC1",
+    "rosbot_xl_digital_board": "GENERIC_F407ZGTX"
 }
